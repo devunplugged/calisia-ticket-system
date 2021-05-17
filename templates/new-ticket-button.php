@@ -1,0 +1,1 @@
+<a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>calisia-new-ticket/?order_id=<?php echo $args['order_id']; ?>">Nowy ticket</a>
