@@ -48,6 +48,27 @@ class data{
         );
     }
 
+    public static function validate_tickets_sort($order_by){
+
+    }
+
+    public static function browse_query($browser){
+        global $wpdb;
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT SQL_CALC_FOUND_ROWS * FROM ".$wpdb->prefix."calisia_ticket ORDER BY %s LIMIT %d,%d",
+                array(
+                    $browser->get_order_by(),                    
+                    $browser->get_offset(),
+                    $browser->get_items_per_page()
+                )
+            )
+        );
+        $number_of_all_results = $wpdb->get_results("SELECT FOUND_ROWS() as found_rows");
+
+        return array('results' => $results, 'number_of_all_results' => $number_of_all_results[0]->found_rows);
+    }
+
     public static function get_all_tickets(){
         global $wpdb;
 

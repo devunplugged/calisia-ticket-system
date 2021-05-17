@@ -9,6 +9,7 @@ require_once __DIR__ . '/src/data.php';
 require_once __DIR__ . '/src/ticket.php';
 require_once __DIR__ . '/src/backend.php';
 require_once __DIR__ . '/src/frontend.php';
+require_once __DIR__ . '/src/browser.php';
 
 //$calisia_ticket = new calisia_ticket_system\ticket();
 //check if update is necessary
