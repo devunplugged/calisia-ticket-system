@@ -18,12 +18,15 @@ class backend{
         if(isset($_POST['calisia_ticket_reply'])){
             data::save_message($_GET['id']);
         }
+
+        data::ticket_seen($_GET['id']);
+
         $conversation = data::get_conversation($_GET['id']);
 
         $messages = '';
         foreach($conversation as $message){
             $messages .= renderer::render(
-                'ticket-message',
+                'tickets/messages/ticket-message',
                 array(
                     'message' => $message
                 ),
@@ -31,23 +34,34 @@ class backend{
             );
         }
         
+
         renderer::render(
-            'ticket-messages',
+            'containers/backend-settings-container',
             array(
-                'messages' => $messages
+                'messages' => renderer::render(
+                                    'tickets/messages/ticket-messages',
+                                    array(
+                                        'messages' => $messages
+                                    ),
+                                    false
+                                ),
+                'reply-form' => renderer::render(
+                                    'tickets/forms/backend-reply-form',
+                                    array(
+                                        'ticket_id' => $_GET['id']
+                                    ),
+                                    false
+                                )
             )
         );
 
-        renderer::render(
-            'reply-form',
-            array(
-                'ticket_id' => $_GET['id']
-            )
-        );
+        
+
+        ;
     }
 
     public static function browse_tickets(){
-        $browser = new browser(
+        /*$browser = new browser(
             array(
                 'kind' => isset($_GET['kind']) ? $_GET['kind'] : 'order',
                 'order_by' => isset($_GET['order_by']) ? $_GET['order_by'] : 'date',
@@ -56,17 +70,36 @@ class backend{
             )
         );
         $query_result = $browser->get_results();
-        print_r($query_result);
-
+       // print_r($query_result);
+        $ticket_list = '';
         foreach($query_result as $ticket){
-            echo "<div><a href='/wp-admin/admin.php?page=calisia-tickets&id=".$ticket->id."'>".$ticket->title."</a></div>";
+            $ticket_list .= renderer::render(
+                'tickets-list-element-backend',
+                array(
+                    'ticket' => $ticket
+                ),
+                false
+            );
+           // echo "<div><a href='/wp-admin/admin.php?page=calisia-tickets&id=".$ticket->id."'>".$ticket->title."</a></div>";
         }
+
+        renderer::render(
+            'ticket-list-backend',
+            array(
+                'list' => $ticket_list
+            )
+        );
+
         renderer::render(
             'ticket-browser-pagination',
             array(
                 'pagination' => $browser->generate_pagination_array()
             )
-        );
+        );*/
+
+        $tickets_list = new Ticket_List();
+        $tickets_list->prepare_items();
+        $tickets_list->display();
     }
 
     public static function my_admin_page_contents() {

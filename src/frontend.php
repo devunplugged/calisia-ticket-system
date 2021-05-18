@@ -13,11 +13,11 @@ class frontend{
         $tickets = data::get_tickets('order', get_current_user_id(), $order->get_id());
 
         foreach($tickets as $ticket){
-            renderer::render('tickets-list-element',array('ticket' => $ticket));
+            renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket));
         }
 
         renderer::render(
-            'new-ticket-button',
+            'tickets/buttons/new-ticket-button',
             array(
                 'order_id' => $order->get_id()
             )
@@ -31,7 +31,7 @@ class frontend{
         }
     
         renderer::render(
-            'ticket-form',
+            'tickets/forms/ticket-form',
             array(
                 'order_id' => $_GET['order_id'],
                 'kind' => 'order'
@@ -39,15 +39,29 @@ class frontend{
         );
     }
 
+    public static function save_reply(){
+        if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-reply-' . $_POST['ticket_id'] )){
+            if(Form_Token::check_token($_POST['calisia_form_token'])){
+                data::save_message($_GET['id']);
+            }else{
+                renderer::render('alerts/frontend-alert-danger', array('msg'=>'Ta wiadomośc została już zapisana!'));
+            }
+            
+        }else{
+            renderer::render('alerts/frontend-alert-danger', array('msg'=>'Wystąpił błąd.'));
+        }
+    }
+
     public static function ticket(){
-        if(isset($_POST['calisia_ticket'])){
-            data::save_ticket(get_current_user_id());
+        
+        if(isset($_POST['calisia_ticket_reply'])){
+            self::save_reply();
         }
         $conversation = data::get_conversation($_GET['id']);
         $messages = '';
         foreach($conversation as $message){
             $messages .= renderer::render(
-                'ticket-message',
+                'tickets/messages/ticket-message',
                 array(
                     'message' => $message
                 ),
@@ -56,16 +70,18 @@ class frontend{
         }
 
         renderer::render(
-            'ticket-messages',
+            'tickets/messages/ticket-messages',
             array(
                 'messages' => $messages
             )
         );
 
         renderer::render(
-            'reply-form',
+            'tickets/forms/frontend-reply-form',
             array(
-                'ticket_id' => $_GET['id']
+                'ticket_id' => $_GET['id'],
+                'nonce' => wp_create_nonce( 'calisia-ticket-reply-' . $_GET['id'] ),
+                'calisia_form_token' => Form_Token::create_token()
             )
         );
     }

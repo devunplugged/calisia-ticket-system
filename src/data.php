@@ -22,12 +22,12 @@ class data{
 
     public static function save_message($ticket_id){
         global $wpdb;
-        $wpdb->insert( 
+        $result = $wpdb->insert( 
             $wpdb->prefix . 'calisia_ticket_conversation', 
             array( 
                 'ticket_id' => $ticket_id,
                 'added' => current_time( 'mysql' ), 
-                'text' => $_POST['msg'], 
+                'text' => wp_kses_post( stripslashes($_POST['msg'])), 
                 'added_by' => get_current_user_id()
             ) 
         );
@@ -47,7 +47,7 @@ class data{
             )
         );
     }
-
+/*
     public static function validate_tickets_sort($order_by){
 
     }
@@ -68,7 +68,7 @@ class data{
 
         return array('results' => $results, 'number_of_all_results' => $number_of_all_results[0]->found_rows);
     }
-
+*/
     public static function get_all_tickets(){
         global $wpdb;
 
@@ -86,5 +86,11 @@ class data{
                )
             )
         );
+    }
+
+    public static function ticket_seen($ticket_id){
+        global $wpdb;
+
+        return $wpdb->update( $wpdb->prefix."calisia_ticket", array( 'seen' => 1 ), array( 'id' => $ticket_id ), array( '%d' ), array( '%d' ));
     }
 }

@@ -2,7 +2,7 @@
 namespace calisia_ticket_system;
 
 class install{
-    private static $db_version = '1.2';
+    private static $db_version = '1.3';
     
     public static function update_check(){
         //global $calisia_customer_notes_db_version;
@@ -27,6 +27,8 @@ class install{
             user_id int(11) NOT NULL,
             added_by int(11) NOT NULL,
             element_id int(11) NOT NULL,
+            seen int(1) NOT NULL,
+            status ENUM('opened', 'onhold', 'awatingreply', 'completed') NOT NULL default 'opened',
             PRIMARY KEY  (id)
         ) $charset_collate;";
     

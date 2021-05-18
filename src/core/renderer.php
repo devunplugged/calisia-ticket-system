@@ -6,7 +6,7 @@ class renderer{
         if(!$render)
             ob_start();
         
-        include  __DIR__ . '/../templates/'.$template.'.php';
+        include  CALISIA_TICKET_SYSTEM_ROOT . '/templates/'.$template.'.php';
         
         if(!$render){
             $content = ob_get_contents();

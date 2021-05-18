@@ -4,7 +4,7 @@
         $align = 'flex-end';
 ?>
 
-<div style="padding:10px; max-width:90%; background:yellow; margin-bottom:10px; align-self:<?php echo $align; ?>;">
+<div style="padding:10px; max-width:90%; background:white; margin-bottom:10px; border-radius:3px; align-self:<?php echo $align; ?>;">
     <div style="font-size:.8em; color:gray;"><?php echo $args['message']->added; ?></div>
     <div><?php echo $args['message']->text; ?></div>
 </div>
