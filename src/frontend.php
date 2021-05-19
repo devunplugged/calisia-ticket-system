@@ -39,12 +39,20 @@ class frontend{
         );
     }
 
+    
+
     public static function save_reply(){
         if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-reply-' . $_POST['ticket_id'] )){
             if(Form_Token::check_token($_POST['calisia_form_token'])){
-                data::save_message($_GET['id']);
+                try{
+                    $uploaded_files = uploader::save_uploaded_files();
+                }catch(\Exception $e) {
+                    renderer::render('alerts/frontend-alert-danger', array('msg'=>$e->getMessage()));
+                    return;
+                }
+                data::save_message($_GET['id'], $uploaded_files);
             }else{
-                renderer::render('alerts/frontend-alert-danger', array('msg'=>'Ta wiadomośc została już zapisana!'));
+                renderer::render('alerts/frontend-alert-danger', array('msg'=>'Ta wiadomość została już zapisana!'));
             }
             
         }else{
@@ -60,10 +68,12 @@ class frontend{
         $conversation = data::get_conversation($_GET['id']);
         $messages = '';
         foreach($conversation as $message){
+
             $messages .= renderer::render(
                 'tickets/messages/ticket-message',
                 array(
-                    'message' => $message
+                    'message' => $message,
+                    'attachments' => data::get_message_attachments($message->id)
                 ),
                 false
             );

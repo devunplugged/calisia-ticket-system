@@ -20,7 +20,7 @@ class data{
         self::save_message($ticket_id);
     }
 
-    public static function save_message($ticket_id){
+    public static function save_message($ticket_id, $uploaded_files = array()){
         global $wpdb;
         $result = $wpdb->insert( 
             $wpdb->prefix . 'calisia_ticket_conversation', 
@@ -31,6 +31,39 @@ class data{
                 'added_by' => get_current_user_id()
             ) 
         );
+        $message_id = $wpdb->insert_id;
+
+        foreach($uploaded_files as $uploaded_file){
+
+            $wpdb->insert( 
+                $wpdb->prefix . 'calisia_ticket_conversation_files', 
+                array( 
+                    'message_id' => $message_id,
+                    'file_name' => $uploaded_file['name'],
+                    'file_path' => $uploaded_file['path'],
+                    'added' => current_time( 'mysql' ), 
+                    'added_by' => get_current_user_id()
+                ) 
+            );
+        }
+    }
+
+    public static function get_number_of_uploads($user_id, $hours = 1){
+        $since = time() - ($hours * 3600);
+
+        global $wpdb;
+
+        $result = $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT count(id) as upload_count FROM ".$wpdb->prefix."calisia_ticket_conversation_files WHERE added_by = %d AND added > %s",
+            array(
+                $user_id,
+                date('Y-m-d H:i:s', $since)
+               )
+            )
+        );
+        
+        return $result[0]->upload_count;
     }
 
     public static function get_tickets($kind, $user_id, $order_id){
@@ -43,6 +76,19 @@ class data{
                 $kind,
                 $user_id,
                 $order_id
+               )
+            )
+        );
+    }
+
+    public static function get_message_attachments($message_id){
+        global $wpdb;
+
+        return $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT * FROM ".$wpdb->prefix."calisia_ticket_conversation_files WHERE message_id = %d",
+            array(
+                $message_id
                )
             )
         );

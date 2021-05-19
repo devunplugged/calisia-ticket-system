@@ -1,7 +1,11 @@
 <?php
 /**
  * Plugin Name: calisia-ticket-system
+ * Author: Tomasz Boroń
+ * Text Domain: calisia-ticket-system
+ * Domain Path: /languages
  */
+
 define('CALISIA_TICKET_SYSTEM_ROOT', __DIR__);
 define('CALISIA_TICKET_SYSTEM_URL', plugin_dir_url( __FILE__ ));
 
@@ -10,10 +14,13 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/install.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/loader.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/ticket-table.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/form-token.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/uploader.php';
 
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/data.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/backend.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/frontend.php';
+
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ticket.php';
 
 
 

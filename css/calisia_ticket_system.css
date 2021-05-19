@@ -1,3 +1,63 @@
+:root {
+  --calisia-ticket-system-darkred: darkred;
+  --calisia-ticket-system-lightred: rgb(255, 158, 158);
+  --calisia-ticket-system-lightgray: #ccd0d4;
+  --calisia-ticket-system-primary-bg: #fff;
+  --calisia-ticket-system-messages-bg: whitesmoke;
+}
+
+.pt-10 {
+  padding-top: 10px !important;
+}
+
+.pt-20 {
+  padding-top: 20px !important;
+}
+
+.pb-10 {
+  padding-bottom: 10px !important;
+}
+
+.pb-20 {
+  padding-bottom: 20px !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+
+.mb-10 {
+  margin-bottom: 10px !important;
+}
+
+.mb-20 {
+  margin-bottom: 20px !important;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.p-20 {
+  padding: 20px;
+}
+
+.m-10 {
+  margin: 10px;
+}
+
+.m-20 {
+  margin: 20px;
+}
+
+.bg-primary {
+  background: var(--calisia-ticket-system-primary-bg);
+}
+
 .backend-settings-container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -18,17 +78,23 @@
 
 .calisia-admin-alert {
   padding: 10px;
-  background: #ff9e9e;
-  color: darkred;
-  border: solid 1px darkred;
+  background: var(--calisia-ticket-system-lightred);
+  color: var(--calisia-ticket-system-darkred);
+  border: solid 1px var(--calisia-ticket-system-darkred);
   border-radius: 2px;
 }
 
 .calisia-ticket-system-backend-panel {
   width: 50%;
   padding: 10px;
-  background: white;
-  border: solid #ccd0d4 1px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.calisia-ticket-system-backend-panel-content {
+  background: var(--calisia-ticket-system-primary-bg);
+  border: solid var(--calisia-ticket-system-lightgray) 1px;
+  padding: 10px;
 }
 
 .calisia-ticket-system-backend-panel textarea {
@@ -37,9 +103,9 @@
 }
 
 #calisia-ticket-messages {
-  background: whitesmoke;
+  background: var(--calisia-ticket-system-messages-bg);
   padding: 10px;
-  border: solid #ccd0d4 1px;
+  border: solid var(--calisia-ticket-system-lightgray) 1px;
   border-radius: 5px;
 }
 /*# sourceMappingURL=calisia_ticket_system.css.map */

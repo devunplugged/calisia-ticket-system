@@ -2,7 +2,7 @@
 namespace calisia_ticket_system;
 
 class install{
-    private static $db_version = '1.3';
+    private static $db_version = '1.8';
     
     public static function update_check(){
         //global $calisia_customer_notes_db_version;
@@ -41,6 +41,20 @@ class install{
             ticket_id int(11) NOT NULL,
             added datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
             text text NOT NULL,
+            added_by int(11) NOT NULL,
+            PRIMARY KEY  (id)
+        ) $charset_collate;";
+        
+        dbDelta( $sql );
+
+
+        $table_name = $wpdb->prefix . 'calisia_ticket_conversation_files';
+        $sql = "CREATE TABLE $table_name (
+            id int(11) NOT NULL AUTO_INCREMENT,
+            message_id int(11) NOT NULL,
+            file_name varchar(40) NOT NULL,
+            file_path varchar(256) NOT NULL,
+            added datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
             added_by int(11) NOT NULL,
             PRIMARY KEY  (id)
         ) $charset_collate;";

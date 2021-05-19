@@ -16,48 +16,77 @@ class backend{
 
     public static function single_ticket(){
         if(isset($_POST['calisia_ticket_reply'])){
-            data::save_message($_GET['id']);
+            try{
+                $uploaded_files = uploader::save_uploaded_files();
+            }catch(\Exception $e) {
+                renderer::render('alerts/frontend-alert-danger', array('msg'=>$e->getMessage()));
+                return;
+            }
+            data::save_message($_GET['id'], $uploaded_files);
         }
 
         data::ticket_seen($_GET['id']);
+        $ticket = new ticket((int)$_GET['id']);
 
-        $conversation = data::get_conversation($_GET['id']);
 
+
+
+/*
+echo "<pre>";
+print_r($ticket);
+echo "</pre>";
+*/
         $messages = '';
-        foreach($conversation as $message){
+        foreach($ticket->get_conversation() as $message){
             $messages .= renderer::render(
                 'tickets/messages/ticket-message',
                 array(
-                    'message' => $message
+                    'message' => $message,
+                    'attachments' => data::get_message_attachments($message->id)
                 ),
                 false
             );
         }
         
 
+
+
         renderer::render(
             'containers/backend-settings-container',
             array(
-                'messages' => renderer::render(
-                                    'tickets/messages/ticket-messages',
+                'title-bar' => renderer::render(
+                                    'tickets/bars/single-ticket-backend-bar',
                                     array(
-                                        'messages' => $messages
+                                        'ticket_id' => $ticket->get_id()
+                                    )
+                                ),
+                'conversation' => renderer::render(
+                                    'elements/backend-conversation',
+                                    array(
+                                        'messages' => renderer::render(
+                                                            'tickets/messages/ticket-messages',
+                                                            array(
+                                                                'messages' => $messages
+                                                            ),
+                                                            false
+                                                        ),
+                                        'reply-form' => renderer::render(
+                                                            'tickets/forms/backend-reply-form',
+                                                            array(
+                                                                'ticket_id' => $ticket->get_id()
+                                                            ),
+                                                            false
+                                                        )
                                     ),
                                     false
                                 ),
-                'reply-form' => renderer::render(
-                                    'tickets/forms/backend-reply-form',
-                                    array(
-                                        'ticket_id' => $_GET['id']
-                                    ),
-                                    false
-                                )
+                'user' => renderer::render('elements/backend-user',array(), false)
             )
         );
 
         
 
-        ;
+        
     }
 
     public static function browse_tickets(){

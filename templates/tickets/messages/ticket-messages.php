@@ -1,4 +1,4 @@
-<div id="calisia-ticket-messages" style="display:flex; flex-direction:column; max-height: 300px; overflow:auto;">
+<div id="calisia-ticket-messages" style="display:flex; flex-direction:column; max-height: 400px; overflow:auto;">
     <?php echo $args['messages']; ?>
 </div>
 

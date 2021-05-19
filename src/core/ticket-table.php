@@ -10,7 +10,7 @@ class Ticket_List extends WP_List_Table {
 
 		parent::__construct( [
 			'singular' => __( 'Customer', 'sp' ), //singular name of the listed records
-			'plural'   => __( 'Customers', 'sp' ), //plural name of the listed records
+			'plural'   => __( 'tickets', 'sp' ), //plural name of the listed records
 			'ajax'     => false //does this table support ajax?
 		] );
 
@@ -18,14 +18,14 @@ class Ticket_List extends WP_List_Table {
 
 
 	/**
-	 * Retrieve customers data from the database
+	 * Retrieve tickets data from the database
 	 *
 	 * @param int $per_page
 	 * @param int $page_number
 	 *
 	 * @return mixed
 	 */
-	public static function get_customers( $per_page = 5, $page_number = 1 ) {
+	public static function get_tickets( $per_page = 5, $page_number = 1 ) {
 
 		global $wpdb;
 
@@ -78,7 +78,7 @@ class Ticket_List extends WP_List_Table {
 
 	/** Text displayed when no customer data is available */
 	public function no_items() {
-		_e( 'No customers avaliable.', 'sp' );
+		_e( 'No tickets avaliable.', 'sp' );
 	}
 
 
@@ -207,7 +207,7 @@ class Ticket_List extends WP_List_Table {
 		/** Process bulk action */
 		$this->process_bulk_action();
 
-		$per_page     = $this->get_items_per_page( 'customers_per_page', 5 );
+		$per_page     = $this->get_items_per_page( 'tickets_per_page', 5 );
 		$current_page = $this->get_pagenum();
 		$total_items  = self::record_count();
 
@@ -216,7 +216,7 @@ class Ticket_List extends WP_List_Table {
 			'per_page'    => $per_page //WE have to determine how many items to show on a page
 		] );
 
-		$this->items = self::get_customers( $per_page, $current_page );
+		$this->items = self::get_tickets( $per_page, $current_page );
 	}
 
 	public function process_bulk_action() {

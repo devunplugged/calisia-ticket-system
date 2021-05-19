@@ -4,5 +4,7 @@
     <input type="hidden" name="calisia_ticket_reply" value="1">
     <input type="hidden" name="calisia_nonce" value="<?php echo $args['nonce']; ?>">
     <input type="hidden" name="calisia_form_token" value="<?php echo $args['calisia_form_token']; ?>">
-    <button type="submit" class="button">Wyślij</button>
+    <input type="hidden" name="max_file_size" value="2000000">
+    <input type="file" name="calisia_file_upload[]" multiple="multiple"  style="margin-top:10px; margin-bottom:10px;"/>
+    <button type="submit" class="button" style="width:100%;">Wyślij</button>
 </form>
