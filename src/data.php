@@ -134,9 +134,20 @@ class data{
         );
     }
 
-    public static function ticket_seen($ticket_id){
+    
+
+    public static function get_number_of_unread_messages($ticket_id){
         global $wpdb;
 
-        return $wpdb->update( $wpdb->prefix."calisia_ticket", array( 'seen' => 1 ), array( 'id' => $ticket_id ), array( '%d' ), array( '%d' ));
+        $result = $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT count(id) as unread FROM ".$wpdb->prefix."calisia_ticket_conversation WHERE ticket_id = %d AND seen = 0",
+            array(
+                $ticket_id
+               )
+            )
+        );
+        
+        return $result[0]->unread;
     }
 }

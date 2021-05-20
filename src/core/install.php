@@ -2,7 +2,7 @@
 namespace calisia_ticket_system;
 
 class install{
-    private static $db_version = '1.8';
+    private static $db_version = '1.9';
     
     public static function update_check(){
         //global $calisia_customer_notes_db_version;
@@ -42,6 +42,7 @@ class install{
             added datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
             text text NOT NULL,
             added_by int(11) NOT NULL,
+            seen int(1) NOT NULL,
             PRIMARY KEY  (id)
         ) $charset_collate;";
         

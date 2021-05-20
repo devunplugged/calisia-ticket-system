@@ -4,7 +4,6 @@ namespace calisia_ticket_system;
 class uploader{
     public static function save_uploaded_files(){
         
-
         $files_count = count($_FILES['calisia_file_upload']['name']);
         if($files_count > 5){
             throw new \Exception('Maximum number of files (5) exceeded');
@@ -39,7 +38,8 @@ class uploader{
                     $uploaded_files[] = array('path' => CALISIA_TICKET_SYSTEM_URL . "uploads/" . $new_file_name, 'name' => $new_file_name);
                 }
             }else{
-                throw new \Exception('There was a problem uploading one of the files (files cannot be bigger than 2MB)');
+                if($_FILES['calisia_file_upload']['name'][$i] != '')
+                    throw new \Exception('There was a problem uploading one of the files (files cannot be bigger than 2MB)');
             }
         }
         return $uploaded_files;

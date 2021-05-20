@@ -42,32 +42,55 @@ class frontend{
     
 
     public static function save_reply(){
+        $ticket = new ticket((int)$_GET['id']);
         if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-reply-' . $_POST['ticket_id'] )){
             if(Form_Token::check_token($_POST['calisia_form_token'])){
                 try{
                     $uploaded_files = uploader::save_uploaded_files();
                 }catch(\Exception $e) {
-                    renderer::render('alerts/frontend-alert-danger', array('msg'=>$e->getMessage()));
+                    events::add_event($e->getMessage(), 'danger');
+                    wp_redirect( $ticket->get_frontend_ticket_url() );
+                    exit;
                     return;
                 }
                 data::save_message($_GET['id'], $uploaded_files);
+                
+                
             }else{
-                renderer::render('alerts/frontend-alert-danger', array('msg'=>'Ta wiadomość została już zapisana!'));
+                events::add_event(__('This message has been saved already','calisia-ticket-system'), 'warning');
             }
             
         }else{
-            renderer::render('alerts/frontend-alert-danger', array('msg'=>'Wystąpił błąd.'));
+            events::add_event(__('Unexpected error','calisia-ticket-system'), 'danger');
+        }
+
+        wp_redirect( $ticket->get_frontend_ticket_url() );
+        exit;
+    }
+
+    public static function save_forms(){
+        if(isset($_POST['calisia_ticket_reply'])){
+            self::save_reply();
         }
     }
 
     public static function ticket(){
         
-        if(isset($_POST['calisia_ticket_reply'])){
-            self::save_reply();
+        events::show_events();
+  
+        $ticket = new ticket((int)$_GET['id']);
+        if(!$ticket->user_has_access(get_current_user_id())){
+            renderer::render(
+                'alerts/alert-danger',
+                array(
+                    'msg' => __('You are not allowed to view this content', 'calisia-ticket-system')
+                )
+            );
+            return;
         }
-        $conversation = data::get_conversation($_GET['id']);
+
         $messages = '';
-        foreach($conversation as $message){
+        foreach($ticket->get_conversation() as $message){
 
             $messages .= renderer::render(
                 'tickets/messages/ticket-message',

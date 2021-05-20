@@ -12,13 +12,17 @@ define('CALISIA_TICKET_SYSTEM_URL', plugin_dir_url( __FILE__ ));
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/renderer.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/install.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/loader.php';
-require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/ticket-table.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/form-token.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/uploader.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/inputs.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/events.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/wp-options.php';
 
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/data.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/backend.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/frontend.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ticket-table.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/settings.php';
 
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ticket.php';
 
@@ -44,3 +48,11 @@ add_action( 'admin_menu', 'calisia_ticket_system\backend::my_admin_menu' );
 
 //load css and js files in backend (admin)
 add_action('admin_enqueue_scripts', 'calisia_ticket_system\loader::load_css');
+
+//save forms and redirect
+add_action( 'template_redirect', 'calisia_ticket_system\frontend::save_forms' );
+add_action( 'admin_init', 'calisia_ticket_system\backend::save_forms' );
+
+//settings page 
+add_action( 'admin_menu', 'calisia_ticket_system\settings::add_settings_page' );
+add_action( 'admin_init', 'calisia_ticket_system\settings::register_settings' );

@@ -56,7 +56,7 @@ class Ticket_List extends WP_List_Table {
 
 		$wpdb->delete(
 			"{$wpdb->prefix}calisia_ticket",
-			[ 'ID' => $id ],
+			[ 'id' => $id ],
 			[ '%d' ]
 		);
 	}
@@ -94,9 +94,10 @@ class Ticket_List extends WP_List_Table {
 		switch ( $column_name ) {
 			case 'title':
 				$link_url = menu_page_url( 'calisia-tickets', false ).'&id='.$item['id'];
+				$number_of_unread = data::get_number_of_unread_messages($item['id']);
 				$link_name = $item[ $column_name ];
-				if(!$item['seen'])
-					$link_name = '<strong>' . $link_name . '</strong>';
+				if($number_of_unread)
+					$link_name = '<strong>' . $link_name . ' ('.$number_of_unread.')</strong>';
                 return "<a href='$link_url'>$link_name</a>";
                 break;
 			case 'seen':

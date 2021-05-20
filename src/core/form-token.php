@@ -3,12 +3,13 @@ namespace calisia_ticket_system;
 
 class Form_Token{
     public static function create_token(){
-        $_SESSION['calisia-form-token'] = self::generateRandomString();
-        return $_SESSION['calisia-form-token'];
+        //$_SESSION['calisia-form-token'] = self::generateRandomString();
+        update_user_meta(get_current_user_id(), 'calisia-form-token', self::generateRandomString());
+        return get_user_meta(get_current_user_id(), 'calisia-form-token', true );
     }
 
     public static function check_token($token){
-        if($token == $_SESSION['calisia-form-token'])
+        if($token == get_user_meta(get_current_user_id(), 'calisia-form-token', true ))
             return true;
         return false;
     }

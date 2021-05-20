@@ -95,3 +95,38 @@
     border: solid var(--calisia-ticket-system-lightgray) 1px;
     border-radius: 5px;
 }
+.calisia-single-ticket-title-bar{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.calisia-ticket-system-user-details-element{
+    width: 100%;
+    padding: 10px;
+    border-bottom: solid var(--calisia-ticket-system-lightgray) 1px;
+    box-sizing: border-box;
+}
+
+.calisia-ticket-system-user-details-name {
+    font-size: 2em;
+    font-weight: 600;
+    text-align: center;
+  }
+
+.text-center{
+    text-align: center;
+}
+.text-size-1-2{
+    font-size: 1.2em;
+}
+.text-size-1-5{
+    font-size: 1.5em;
+}
+.text-size-2{
+    font-size: 2em;
+}
+.text-bold{
+    font-weight: bold;
+}

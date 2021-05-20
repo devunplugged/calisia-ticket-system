@@ -100,4 +100,30 @@ class ticket extends default_object{
             )
         );
     }
+
+    public function user_has_access($user_id){
+        if($this->user_id == $user_id)
+            return true;
+        return false;
+    }
+
+    public function mark_ticket_seen(){
+        global $wpdb;
+
+        return $wpdb->update( $wpdb->prefix."calisia_ticket", array( 'seen' => 1 ), array( 'id' => $this->id ), array( '%d' ), array( '%d' ));
+    }
+
+    public function mark_messages_seen(){
+        global $wpdb;
+
+        return $wpdb->update( $wpdb->prefix."calisia_ticket_conversation", array( 'seen' => 1 ), array( 'ticket_id' => $this->id ), array( '%d' ), array( '%d' ));
+    }
+
+    public function get_backend_ticket_url(){
+        return menu_page_url( 'calisia-tickets', false ).'&id='.$this->id;
+    }
+    
+    public function get_frontend_ticket_url(){
+        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-show-ticket/?id=' . $this->id;
+    }
 }
