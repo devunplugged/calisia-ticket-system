@@ -16,7 +16,7 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/form-token.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/uploader.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/inputs.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/events.php';
-require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/wp-options.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/options.php';
 
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/data.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/backend.php';
