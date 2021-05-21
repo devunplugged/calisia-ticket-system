@@ -9,13 +9,36 @@ class Ticket_List extends WP_List_Table {
 	public function __construct() {
 
 		parent::__construct( [
-			'singular' => __( 'Customer', 'sp' ), //singular name of the listed records
-			'plural'   => __( 'tickets', 'sp' ), //plural name of the listed records
+			'singular' => __( 'ticket', 'calisia-ticket-system' ), //singular name of the listed records
+			'plural'   => __( 'tickets', 'calisia-ticket-system' ), //plural name of the listed records
 			'ajax'     => false //does this table support ajax?
 		] );
 
 	}
 
+
+	private static function where_clause(){
+		$gets = array('kind', 'status', 'user_id');
+		$where = ' WHERE deleted=0 AND';
+		$params = array();
+
+		foreach($_GET as $key => $value){
+			if(in_array($key, $gets)){
+				if(is_numeric($value)){
+					$where .= " $key=%d AND";
+					$params[] = $value;
+				}else{
+					if($value != 'all'){
+						$where .= " $key=%s AND";
+						$params[] = $value;
+					}	
+				}
+				
+			}
+		}
+
+		return array('sql'=>rtrim($where, 'AND'), 'params'=>$params);
+	}
 
 	/**
 	 * Retrieve tickets data from the database
@@ -31,16 +54,32 @@ class Ticket_List extends WP_List_Table {
 
 		$sql = "SELECT * FROM {$wpdb->prefix}calisia_ticket";
 
+		$where_clause = self::where_clause();
+		$sql .= $where_clause['sql'];
+		$params = $where_clause['params'];
+
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			$sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
-			$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
+			$sql .= ' ORDER BY %s %s';
+			$params[] = esc_sql( $_REQUEST['orderby'] );
+			$params[] = ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
+		}else{
+			//default order by
+			$sql .= ' ORDER BY added DESC';
 		}
 
-		$sql .= " LIMIT $per_page";
-		$sql .= ' OFFSET ' . ( $page_number - 1 ) * $per_page;
+		$sql .= " LIMIT %d";
+		$params[] = $per_page;
+		$sql .= ' OFFSET %d';
+		$params[] = ( $page_number - 1 ) * $per_page;
 
 
-		$result = $wpdb->get_results( $sql, 'ARRAY_A' );
+		$result = $wpdb->get_results( 
+			$wpdb->prepare(
+				$sql,
+				$params
+			), 
+			'ARRAY_A' 
+		);
 
 		return $result;
 	}
@@ -51,14 +90,15 @@ class Ticket_List extends WP_List_Table {
 	 *
 	 * @param int $id customer ID
 	 */
-	public static function delete_customer( $id ) {
+	public static function delete_ticket( $id ) {
 		global $wpdb;
-
+		return $wpdb->update( $wpdb->prefix."calisia_ticket", array( 'deleted' => 1 ), array( 'id' => $id ), array( '%d' ), array( '%d' ));
+		/*
 		$wpdb->delete(
 			"{$wpdb->prefix}calisia_ticket",
 			[ 'id' => $id ],
 			[ '%d' ]
-		);
+		);*/
 	}
 
 
@@ -70,15 +110,25 @@ class Ticket_List extends WP_List_Table {
 	public static function record_count() {
 		global $wpdb;
 
-		$sql = "SELECT COUNT(*) FROM {$wpdb->prefix}calisia_ticket";
-
-		return $wpdb->get_var( $sql );
+		$sql = "SELECT COUNT(*) as ticket_count FROM {$wpdb->prefix}calisia_ticket";
+		$where_clause = self::where_clause();
+		if(empty($where_clause['params'])){
+			return $wpdb->get_var( $sql . $where_clause['sql'] );
+		}else{
+			$result = $wpdb->get_results( 
+				$wpdb->prepare(
+					$sql . $where_clause['sql'],
+					$where_clause['params']
+				)
+			);
+			return $result[0]->ticket_count;
+		}
 	}
 
 
 	/** Text displayed when no customer data is available */
 	public function no_items() {
-		_e( 'No tickets avaliable.', 'sp' );
+		_e( 'No tickets avaliable.', 'calisia-ticket-system' );
 	}
 
 
@@ -133,7 +183,7 @@ class Ticket_List extends WP_List_Table {
 	 */
 	function column_name( $item ) {
 
-		$delete_nonce = wp_create_nonce( 'sp_delete_customer' );
+		$delete_nonce = wp_create_nonce( 'sp_delete_ticket' );
 
 		$title = '<strong>' . $item['title'] . '</strong>';
 
@@ -153,11 +203,11 @@ class Ticket_List extends WP_List_Table {
 	function get_columns() {
 		$columns = [
 			'cb'      => '<input type="checkbox" />',
-			'title'    => __( 'Title', 'sp' ),
-			'seen' => __( 'Seen', 'sp' ),
-			'status' => __( 'Status', 'sp' ),
-			'kind' => __( 'Kind', 'sp' ),
-			'added'    => __( 'Added', 'sp' )
+			'title'    => __( 'Title', 'calisia-ticket-system' ),
+			'seen' => __( 'Seen', 'calisia-ticket-system' ),
+			'status' => __( 'Status', 'calisia-ticket-system' ),
+			'kind' => __( 'Kind', 'calisia-ticket-system' ),
+			'added'    => __( 'Added', 'calisia-ticket-system' )
 		];
 
 		return $columns;
@@ -172,7 +222,7 @@ class Ticket_List extends WP_List_Table {
 	public function get_sortable_columns() {
 		$sortable_columns = array(
 			'title' => array( 'title', true ),
-			'added' => array( 'kind', false )
+			'added' => array( 'added', false )
 		);
 
 		return $sortable_columns;
@@ -228,11 +278,11 @@ class Ticket_List extends WP_List_Table {
 			// In our file that handles the request, verify the nonce.
 			$nonce = esc_attr( $_REQUEST['_wpnonce'] );
 
-			if ( ! wp_verify_nonce( $nonce, 'sp_delete_customer' ) ) {
+			if ( ! wp_verify_nonce( $nonce, 'sp_delete_ticket' ) ) {
 				die( 'Go get a life script kiddies' );
 			}
 			else {
-				self::delete_customer( absint( $_GET['customer'] ) );
+				self::delete_ticket( absint( $_GET['customer'] ) );
 
 		                // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
 		                // add_query_arg() return the current url
@@ -251,7 +301,7 @@ class Ticket_List extends WP_List_Table {
 
 			// loop over the array of record IDs and delete them
 			foreach ( $delete_ids as $id ) {
-				self::delete_customer( $id );
+				self::delete_ticket( $id );
 
 			}
 

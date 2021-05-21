@@ -38,6 +38,16 @@
   margin-bottom: 20px !important;
 }
 
+.my-10 {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.my-20 {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
 .p-10 {
   padding: 10px;
 }
@@ -54,8 +64,25 @@
   margin: 20px;
 }
 
+.w-50 {
+  width: 50%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
 .bg-primary {
   background: var(--calisia-ticket-system-primary-bg);
+}
+
+.r-img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ticket-order-product-img {
+  width: 50px;
 }
 
 .backend-settings-container {
@@ -85,7 +112,6 @@
 }
 
 .calisia-ticket-system-backend-panel {
-  width: 50%;
   padding: 10px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;

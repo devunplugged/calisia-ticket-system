@@ -14,7 +14,7 @@ class settings{
         register_setting( 'calisia-ticket-system-options', 'calisia_ticket_system_plugin_options' ); //, 'dbi_example_plugin_options_validate'
         add_settings_section( 'integration_settings', __( 'Integration Settings', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
     
-        add_settings_field( 'calisia_ticket_system_customer_notes_integration', __('calisia-ticket-system', 'calisia-ticket-system'), 'calisia_ticket_system\settings::customer_notes_integration_input', 'calisia-ticket-system-settings-page', 'integration_settings' );
+        add_settings_field( 'calisia_ticket_system_customer_notes_integration', __('calisia-cutomer-notes', 'calisia-ticket-system'), 'calisia_ticket_system\settings::customer_notes_integration_input', 'calisia-ticket-system-settings-page', 'integration_settings' );
         //add_settings_field( 'calisia_ticket_system_order_notes', __('Edit order page', 'calisia-ticket-system'), 'calisia_ticket_system\settings::order_notes_input', 'calisia-ticket-system-settings-page', 'integration_settings' );      
     }
 
