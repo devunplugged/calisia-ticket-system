@@ -16,7 +16,7 @@ class inputs{
     }
 
     public static function select($options,  $output = false){
-        $select = '<select name="'.$options['name'].'" id="'.$options['id'].'" class="'.$options['class'].'">';
+        $select = '<select name="'.$options['name'].'" id="'.$options['id'].'" class="'.$options['class'].' calisia-select2">';
         foreach($options['options'] as $key => $value){
             $select .= '<option value="'.$value.'" ';
             if($options['value'] == $value)

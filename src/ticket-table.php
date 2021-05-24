@@ -48,7 +48,7 @@ class Ticket_List extends WP_List_Table {
 	 *
 	 * @return mixed
 	 */
-	public static function get_tickets( $per_page = 5, $page_number = 1 ) {
+	public static function get_tickets( $per_page = 25, $page_number = 1 ) {
 
 		global $wpdb;
 
@@ -91,8 +91,13 @@ class Ticket_List extends WP_List_Table {
 	 * @param int $id customer ID
 	 */
 	public static function delete_ticket( $id ) {
-		global $wpdb;
-		return $wpdb->update( $wpdb->prefix."calisia_ticket", array( 'deleted' => 1 ), array( 'id' => $id ), array( '%d' ), array( '%d' ));
+		//global $wpdb;
+		//return $wpdb->update( $wpdb->prefix."calisia_ticket", array( 'deleted' => 1 ), array( 'id' => $id ), array( '%d' ), array( '%d' ));
+
+		$ticket = new ticket($id);
+		$ticket->delete();
+
+
 		/*
 		$wpdb->delete(
 			"{$wpdb->prefix}calisia_ticket",
@@ -258,7 +263,7 @@ class Ticket_List extends WP_List_Table {
 		/** Process bulk action */
 		$this->process_bulk_action();
 
-		$per_page     = $this->get_items_per_page( 'tickets_per_page', 5 );
+		$per_page     = $this->get_items_per_page( 'tickets_per_page', 25 );
 		$current_page = $this->get_pagenum();
 		$total_items  = self::record_count();
 

@@ -16,19 +16,25 @@ class raw{
     }
 
     public static function browse_tickets($render = true){
+        ob_start();
+            $tickets_list = new cts\Ticket_List();
+            $tickets_list->prepare_items();
+            $tickets_list->display();
+        $tickets_table = ob_get_contents();
+        ob_end_clean();
+        
         if(!$render){
             ob_start();
         }
 
         echo controls::ticket_table_controls();
 
-        $tickets_list = new cts\Ticket_List();
-        $tickets_list->prepare_items();
+        
         cts\renderer::render(
             'tickets/forms/default',
             array(
                 'method' => 'POST',
-                'content' => $tickets_list->display()
+                'content' => $tickets_table
             )
         );
 

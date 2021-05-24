@@ -150,4 +150,38 @@ class data{
         
         return $result[0]->unread;
     }
+
+    public static function save_post_to_ticket(){
+        $ticket = new ticket();
+        $ticket->set_title($_POST['title']);
+        $ticket->set_kind($_POST['kind']);
+        $ticket->set_element_id($_POST['order_id']); 
+        $ticket->set_added(current_time( 'mysql' ));
+        $ticket->set_user_id(get_current_user_id());
+        $ticket->set_added_by(get_current_user_id()); 
+        $ticket->save();
+        return $ticket;
+    }
+
+    public static function save_post_to_message($ticket_id){
+        $message = new message();
+        $message->set_ticket_id($ticket_id);
+        $message->set_added(current_time( 'mysql' ));
+        $message->set_text($_POST['msg']);
+        $message->set_added_by(get_current_user_id());
+        $message->save();
+        return $message;
+    }
+
+    public static function save_uploads($message_id, $uploaded_files){
+        foreach($uploaded_files as $uploaded_file){
+            $file = new file();
+            $file->set_message_id($message_id);
+            $file->set_file_name($uploaded_file['name']);
+            $file->set_file_path($uploaded_file['path']);
+            $file->set_added(current_time( 'mysql' ));
+            $file->set_added_by(get_current_user_id());
+            $file->save();
+        }
+    }
 }

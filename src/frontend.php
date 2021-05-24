@@ -25,9 +25,11 @@ class frontend{
         
     }
 
+
     public static function new_ticket() {
         if(isset($_POST['calisia_ticket'])){
-            data::save_ticket(get_current_user_id());
+            $ticket = data::save_post_to_ticket();
+            data::save_post_to_message($ticket->get_id());
         }
     
         renderer::render(
@@ -39,38 +41,11 @@ class frontend{
         );
     }
 
-    
-
-    public static function save_reply(){
-        $ticket = new ticket((int)$_GET['id']);
-        if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-reply-' . $_POST['ticket_id'] )){
-            if(Form_Token::check_token($_POST['calisia_form_token'])){
-                try{
-                    $uploaded_files = uploader::save_uploaded_files();
-                }catch(\Exception $e) {
-                    events::add_event($e->getMessage(), 'danger');
-                    wp_redirect( $ticket->get_frontend_ticket_url() );
-                    exit;
-                    return;
-                }
-                data::save_message($_GET['id'], $uploaded_files);
-                
-                
-            }else{
-                events::add_event(__('This message has been saved already','calisia-ticket-system'), 'warning');
-            }
-            
-        }else{
-            events::add_event(__('Unexpected error','calisia-ticket-system'), 'danger');
-        }
-
-        wp_redirect( $ticket->get_frontend_ticket_url() );
-        exit;
-    }
-
     public static function save_forms(){
         if(isset($_POST['calisia_ticket_reply'])){
-            self::save_reply();
+            //self::save_reply();
+            $ticket = new ticket($_GET['id']);
+            $ticket->save_reply('get_frontend_ticket_url');
         }
     }
 

@@ -71,11 +71,12 @@ class panels{
                                     __('Opened', 'calisia-ticket-system') => 'opened',
                                     __('Onhold', 'calisia-ticket-system') => 'onhold',
                                     __('Awating Reply', 'calisia-ticket-system') => 'awatingreply',
-                                    __('Complete', 'calisia-ticket-system') => 'complete'
+                                    __('Complete', 'calisia-ticket-system') => 'completed'
                                 ),
                                 'value' => $ticket_status
                             )
-                        )
+                        ),
+                        'nonce' => wp_create_nonce( 'calisia-ticket-status' . $ticket_id )
                     ),
                     false
                 )

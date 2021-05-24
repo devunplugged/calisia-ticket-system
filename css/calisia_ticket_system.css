@@ -81,7 +81,24 @@
   height: auto;
 }
 
-.ticket-order-product-img {
+.d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.flex-space-between {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.flex-wrap {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.thumb img {
   width: 50px;
 }
 
@@ -181,5 +198,10 @@
 
 .text-bold {
   font-weight: bold;
+}
+
+.select2-search__field {
+  max-width: 100%;
+  min-width: 0 !important;
 }
 /*# sourceMappingURL=calisia_ticket_system.css.map */

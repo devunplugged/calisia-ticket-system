@@ -70,9 +70,22 @@
     height: auto;
 }
 
-.ticket-order-product-img{
-    width: 50px;
+.d-flex{
+    display: flex;
 }
+
+.flex-space-between{
+    justify-content: space-between;;
+}
+
+.flex-wrap{
+    flex-wrap: wrap;
+}
+
+.thumb img{
+    width:50px;
+}
+
 
 .backend-settings-container{
     display: flex;
@@ -149,4 +162,9 @@
 }
 .text-bold{
     font-weight: bold;
+}
+
+.select2-search__field{
+    max-width: 100%;
+    min-width: 0 !important;
 }

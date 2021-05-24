@@ -5,6 +5,7 @@ use \calisia_ticket_system as cts;
 
 class controls{
     public static function ticket_table_controls(){
+
          return cts\renderer::render(
             'tables/ticket-table-controls',
             array(
@@ -18,7 +19,7 @@ class controls{
                                                 __('Order', 'calisia-ticket-system') => 'order',
                                                 __('Other', 'calisia-ticket-system') => 'other'
                                             ),
-                                            'value' => isset($_GET['ticket_type']) ? $_GET['ticket_type'] : 'all'
+                                            'value' => isset($_GET['kind']) ? $_GET['kind'] : 'all'
                                         )
                                     ),
                 'status_select' => cts\inputs::select(
@@ -33,7 +34,7 @@ class controls{
                                                 __('Awaiting Reply', 'calisia-ticket-system') => 'awatingreply',
                                                 __('Completed', 'calisia-ticket-system') => 'completed'
                                             ),
-                                            'value' => isset($_GET['ticket_status']) ? $_GET['ticket_status'] : 'all'
+                                            'value' => isset($_GET['status']) ? $_GET['status'] : 'all'
                                         )
                                     )
             ),

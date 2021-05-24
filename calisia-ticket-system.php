@@ -9,6 +9,7 @@
 define('CALISIA_TICKET_SYSTEM_ROOT', __DIR__);
 define('CALISIA_TICKET_SYSTEM_URL', plugin_dir_url( __FILE__ ));
 
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/default-object.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/renderer.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/install.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/loader.php';
@@ -25,6 +26,8 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ticket-table.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/settings.php';
 
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ticket.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/message.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/file.php';
 
 
 
@@ -47,7 +50,8 @@ add_action( 'woocommerce_order_details_after_customer_details', 'calisia_ticket_
 add_action( 'admin_menu', 'calisia_ticket_system\backend::my_admin_menu' );
 
 //load css and js files in backend (admin)
-add_action('admin_enqueue_scripts', 'calisia_ticket_system\loader::load_css');
+add_action('admin_enqueue_scripts', 'calisia_ticket_system\loader::load_css', 20);
+add_action('admin_enqueue_scripts', 'calisia_ticket_system\loader::load_js', 20);
 
 //save forms and redirect
 add_action( 'template_redirect', 'calisia_ticket_system\frontend::save_forms' );
