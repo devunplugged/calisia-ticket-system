@@ -52,7 +52,7 @@ class Ticket_List extends WP_List_Table {
 
 		global $wpdb;
 
-		$sql = "SELECT * FROM {$wpdb->prefix}calisia_ticket";
+		$sql = "SELECT * FROM {$wpdb->prefix}calisia_ticket_system_ticket";
 
 		$where_clause = self::where_clause();
 		$sql .= $where_clause['sql'];
@@ -115,7 +115,7 @@ class Ticket_List extends WP_List_Table {
 	public static function record_count() {
 		global $wpdb;
 
-		$sql = "SELECT COUNT(*) as ticket_count FROM {$wpdb->prefix}calisia_ticket";
+		$sql = "SELECT COUNT(*) as ticket_count FROM {$wpdb->prefix}calisia_ticket_system_ticket";
 		$where_clause = self::where_clause();
 		if(empty($where_clause['params'])){
 			return $wpdb->get_var( $sql . $where_clause['sql'] );

@@ -75,7 +75,7 @@ class loader{
 
 
 
-        $post_id            = isset( $post->ID ) ? $post->ID : $ticket->get_element_id();
+        $post_id            = isset( $post->ID ) ? $post->ID : $ticket->get_model()->get_element_id();
         $currency           = '';
         $remove_item_notice = __( 'Are you sure you want to remove the selected items?', 'woocommerce' );
 
@@ -128,7 +128,7 @@ class loader{
             'add_order_note_nonce'          => wp_create_nonce( 'add-order-note' ),
             'delete_order_note_nonce'       => wp_create_nonce( 'delete-order-note' ),
             'calendar_image'                => WC()->plugin_url() . '/assets/images/calendar.png',
-            'post_id'                       => isset( $post->ID ) ? $post->ID : $ticket->get_element_id(),
+            'post_id'                       => isset( $post->ID ) ? $post->ID : $ticket->get_model()->get_element_id(),
             'base_country'                  => WC()->countries->get_base_country(),
             'currency_format_num_decimals'  => wc_get_price_decimals(),
             'currency_format_symbol'        => get_woocommerce_currency_symbol( $currency ),

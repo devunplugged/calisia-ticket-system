@@ -9,7 +9,7 @@ class raw{
             'tickets/messages/ticket-message',
             array(
                 'message' => $message,
-                'attachments' => cts\data::get_message_attachments($message->id)
+                'attachments' => cts\data::get_message_attachments($message->get_model()->get_id())
             ),
             false
         );

@@ -2,7 +2,7 @@
 namespace calisia_ticket_system;
 
 class install{
-    private static $db_version = '1.10';
+    private static $db_version = '1.11';
     
     public static function update_check(){
         //global $calisia_customer_notes_db_version;
@@ -15,7 +15,7 @@ class install{
         global $wpdb;
        // global $calisia_customer_notes_db_version;
     
-        $table_name = $wpdb->prefix . 'calisia_ticket';
+        $table_name = $wpdb->prefix . 'calisia_ticket_system_ticket';
         
         $charset_collate = $wpdb->get_charset_collate();
     
@@ -36,7 +36,7 @@ class install{
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
 
-        $table_name = $wpdb->prefix . 'calisia_ticket_conversation';
+        $table_name = $wpdb->prefix . 'calisia_ticket_system_message';
         $sql = "CREATE TABLE $table_name (
             id int(11) NOT NULL AUTO_INCREMENT,
             ticket_id int(11) NOT NULL,
@@ -50,7 +50,7 @@ class install{
         dbDelta( $sql );
 
 
-        $table_name = $wpdb->prefix . 'calisia_ticket_conversation_files';
+        $table_name = $wpdb->prefix . 'calisia_ticket_system_file';
         $sql = "CREATE TABLE $table_name (
             id int(11) NOT NULL AUTO_INCREMENT,
             message_id int(11) NOT NULL,

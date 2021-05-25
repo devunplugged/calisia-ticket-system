@@ -29,7 +29,7 @@ class frontend{
     public static function new_ticket() {
         if(isset($_POST['calisia_ticket'])){
             $ticket = data::save_post_to_ticket();
-            data::save_post_to_message($ticket->get_id());
+            data::save_post_to_message($ticket->get_model()->get_id());
         }
     
         renderer::render(
@@ -71,7 +71,7 @@ class frontend{
                 'tickets/messages/ticket-message',
                 array(
                     'message' => $message,
-                    'attachments' => data::get_message_attachments($message->id)
+                    'attachments' => data::get_message_attachments($message->get_model()->get_id())
                 ),
                 false
             );

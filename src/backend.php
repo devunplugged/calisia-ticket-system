@@ -24,8 +24,8 @@ class backend{
             events::add_event(__('Unexpected error','calisia-ticket-system'), 'danger');
         }*/
 
-        $ticket->set_status($_POST['calisia_ticket_system_status']);
-        $ticket->update();
+        $ticket->get_model()->set_status($_POST['calisia_ticket_system_status']);
+        $ticket->get_model()->update();
 
         wp_redirect( $ticket->get_backend_ticket_url() );
         exit;
@@ -49,7 +49,7 @@ class backend{
         $ticket->mark_ticket_seen();
         $ticket->mark_messages_seen();
 
-        $order = wc_get_order($ticket->get_element_id());
+        $order = wc_get_order($ticket->get_model()->get_element_id());
         
         //$products = array();
         //$product_factory = new \WC_Product_Factory();
@@ -66,12 +66,12 @@ class backend{
         renderer::render(
             'containers/backend-settings-container',
             array(
-                'title-bar' => elements\panels::ticket_title_bar($ticket->get_id(), $ticket->get_status()),
-                'conversation' => elements\panels::ticket_conversation($messages, $ticket->get_id()),
-                'user' => elements\panels::user_info($ticket->get_user_id()),
+                'title-bar' => elements\panels::ticket_title_bar($ticket->get_model()->get_id(), $ticket->get_model()->get_status()),
+                'conversation' => elements\panels::ticket_conversation($messages, $ticket->get_model()->get_id()),
+                'user' => elements\panels::user_info($ticket->get_model()->get_user_id()),
                 'order' => elements\panels::ticket_order_details($order),
                 //'products' => $products,
-                'other_tickets_table' => elements\panels::user_tickets_table($ticket->get_user_id())
+                'other_tickets_table' => elements\panels::user_tickets_table($ticket->get_model()->get_user_id())
             )
         );
     }
