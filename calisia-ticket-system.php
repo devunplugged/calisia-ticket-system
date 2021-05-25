@@ -53,6 +53,10 @@ add_action( 'admin_menu', 'calisia_ticket_system\backend::my_admin_menu' );
 add_action('admin_enqueue_scripts', 'calisia_ticket_system\loader::load_css', 20);
 add_action('admin_enqueue_scripts', 'calisia_ticket_system\loader::load_js', 20);
 
+//load css and js files in frontend
+add_action('wp_enqueue_scripts', 'calisia_ticket_system\loader::load_frontend_css', 19);
+
+
 //save forms and redirect
 add_action( 'template_redirect', 'calisia_ticket_system\frontend::save_forms' );
 add_action( 'admin_init', 'calisia_ticket_system\backend::save_forms' );

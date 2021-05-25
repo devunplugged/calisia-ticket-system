@@ -49,31 +49,25 @@ class backend{
         $ticket->mark_ticket_seen();
         $ticket->mark_messages_seen();
 
-        $order = wc_get_order($ticket->get_model()->get_element_id());
         
-        //$products = array();
-        //$product_factory = new \WC_Product_Factory();
-        //$items = $order->get_items();
-        //foreach($order->get_items() as $key => $item){
-        //    $products[$key] = $product_factory->get_product($item->get_data()['product_id']);
-        //}
 
         $messages = '';
         foreach($ticket->get_conversation() as $message){
             $messages .= elements\raw::ticket_message($message);
         }
+
+        $params = array();
+        $params['title-bar'] = elements\panels::ticket_title_bar($ticket->get_model()->get_id(), $ticket->get_model()->get_status());
+        $params['conversation'] = elements\panels::ticket_conversation($messages, $ticket->get_model()->get_id());
+        $params['user'] = elements\panels::user_info($ticket->get_model()->get_user_id());
+        $params['other_tickets_table'] = elements\panels::user_tickets_table($ticket->get_model()->get_user_id());
+
+        if($ticket->get_model()->get_kind() == 'order'){
+            $order = wc_get_order($ticket->get_model()->get_element_id());
+            $params['order'] = elements\panels::ticket_order_details($order);
+        }
         
-        renderer::render(
-            'containers/backend-settings-container',
-            array(
-                'title-bar' => elements\panels::ticket_title_bar($ticket->get_model()->get_id(), $ticket->get_model()->get_status()),
-                'conversation' => elements\panels::ticket_conversation($messages, $ticket->get_model()->get_id()),
-                'user' => elements\panels::user_info($ticket->get_model()->get_user_id()),
-                'order' => elements\panels::ticket_order_details($order),
-                //'products' => $products,
-                'other_tickets_table' => elements\panels::user_tickets_table($ticket->get_model()->get_user_id())
-            )
-        );
+        renderer::render('containers/backend-settings-container', $params);
     }
 
 

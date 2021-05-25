@@ -4,6 +4,12 @@ namespace calisia_ticket_system;
 
 
 class loader{
+    public static function load_frontend_css(){
+        if(is_account_page())
+            wp_enqueue_style('calisia_ticket_system_frontend_css', CALISIA_TICKET_SYSTEM_URL . 'css/calisia_ticket_system_frontend.css');
+
+    }
+
     public static function load_css(){
         wp_enqueue_style('calisia_ticket_system_css', CALISIA_TICKET_SYSTEM_URL . 'css/calisia_ticket_system.css');
 

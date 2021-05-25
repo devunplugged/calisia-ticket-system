@@ -1,0 +1,44 @@
+.p-10{
+    padding: 10px;
+}
+
+.mt-20{
+    margin-top: 20px;
+}
+.mb-20{
+    margin-bottom: 20px;
+}
+
+.calisia-ticket-llist-title-bar{
+    background: #fbfbfb;
+    margin-top: 20px;
+}
+
+.calisia-tickets-row, .calisia-ticket-llist-title-bar{
+    border-top: solid #e5e5e5 1px;
+    border-left: solid #e5e5e5 1px;
+    border-right: solid #e5e5e5 1px;
+}
+.calisia-tickets-row:last-of-type{
+    border-bottom: solid #e5e5e5 1px;
+}
+.calisia-ticket-row-title{
+    width: 80%;
+    font-size: 1.5em;
+}
+.calisia-ticket-row-date{
+    width: 100%;
+    font-size: .8em;
+}
+.calisia-ticket-row-status{
+    width: 20%;
+    font-size: .8em;
+    text-align: right;
+}
+
+
+.calisia-tickets-row-content{
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

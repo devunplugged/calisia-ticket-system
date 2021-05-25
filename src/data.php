@@ -175,10 +175,13 @@ class data{
         $ticket = new ticket();
         $ticket->get_model()->set_title($_POST['title']);
         $ticket->get_model()->set_kind($_POST['kind']);
-        $ticket->get_model()->set_element_id($_POST['order_id']); 
         $ticket->get_model()->set_added(current_time( 'mysql' ));
         $ticket->get_model()->set_user_id(get_current_user_id());
         $ticket->get_model()->set_added_by(get_current_user_id()); 
+        $ticket->get_model()->set_element_id($_POST['element_id']); 
+        $ticket->get_model()->set_seen(0); 
+        $ticket->get_model()->set_status('opened'); 
+        $ticket->get_model()->set_deleted(0); 
         $ticket->get_model()->save();
         return $ticket;
     }

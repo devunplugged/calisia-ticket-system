@@ -145,6 +145,35 @@ class ticket{
         $this->model->update();
     }
 
+    public function save_ticket($redirect_url_callback = 'get_frontend_ticket_url'){
+        if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-new')){
+
+            if(Form_Token::check_token($_POST['calisia_form_token'])){
+                try{
+                    $uploaded_files = uploader::save_uploaded_files();
+                }catch(\Exception $e) {
+                    events::add_event($e->getMessage(), 'danger');
+                    $this->model->set_element_id($_GET['order_id']);
+                    wp_redirect( $this->get_frontend_new_ticket_url() );
+                    exit;
+                    return;
+                }
+                $ticket = data::save_post_to_ticket();
+                $message = data::save_post_to_message($ticket->model->get_id());
+                data::save_uploads($message->get_model()->get_id(), $uploaded_files);
+                $this->model->set_id($ticket->model->get_id());
+            }else{
+                events::add_event(__('This message has been saved already','calisia-ticket-system'), 'warning');
+            }
+            
+        }else{
+            events::add_event(__('Unexpected error','calisia-ticket-system'), 'danger');
+        }
+
+        wp_redirect( $ticket->$redirect_url_callback() );
+        exit;
+    }
+
     public function save_reply($redirect_url_callback = 'get_frontend_ticket_url'){
         if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-reply-' . $this->model->get_id() )){
 
@@ -177,5 +206,14 @@ class ticket{
     
     public function get_frontend_ticket_url(){
         return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-show-ticket/?id=' . $this->model->get_id();
+    }
+
+    public function get_frontend_new_ticket_url(){
+        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-new-ticket/?order_id=' . $args['order_id'];
+    }
+
+    public function get_frontend_order_url(){
+        $order = wc_get_order($this->model->get_element_id());
+        return $order->get_view_order_url();
     }
 }

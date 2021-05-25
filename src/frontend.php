@@ -12,9 +12,18 @@ class frontend{
 
         $tickets = data::get_tickets('order', get_current_user_id(), $order->get_id());
 
+        $ticket_list = '';
         foreach($tickets as $ticket){
-            renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket));
+            $ticket_list .= renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket), false);
         }
+
+        renderer::render(
+            'tickets/lists/ticket-list-container',
+            array(
+                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array(), false),
+                'ticket_list' => $ticket_list
+            )
+        );
 
         renderer::render(
             'tickets/buttons/new-ticket-button',
@@ -27,26 +36,45 @@ class frontend{
 
 
     public static function new_ticket() {
-        if(isset($_POST['calisia_ticket'])){
+   /*     if(isset($_POST['calisia_ticket'])){
             $ticket = data::save_post_to_ticket();
             data::save_post_to_message($ticket->get_model()->get_id());
-        }
-    
+        }*/
+    /*
         renderer::render(
             'tickets/forms/ticket-form',
             array(
                 'order_id' => $_GET['order_id'],
                 'kind' => 'order'
             )
-        );
+        );*/
+        events::show_events();
+
+        $args = array();
+        if(isset($_GET['order_id'])){
+            $args['order_id'] = $_GET['order_id'];
+            $args['kind'] = 'order';
+        }
+        $args['nonce'] = wp_create_nonce( 'calisia-ticket-new' );
+        $args['calisia_form_token'] = Form_Token::create_token();
+        renderer::render('tickets/forms/new-ticket-form', $args);
     }
 
+
+
     public static function save_forms(){
+
         if(isset($_POST['calisia_ticket_reply'])){
             //self::save_reply();
             $ticket = new ticket($_GET['id']);
             $ticket->save_reply('get_frontend_ticket_url');
         }
+
+        if(isset($_POST['calisia_ticket_new'])){
+            $ticket = new ticket();
+            $ticket->save_ticket('get_frontend_ticket_url');
+        }
+
     }
 
     public static function ticket(){
@@ -76,6 +104,13 @@ class frontend{
                 false
             );
         }
+
+        renderer::render(
+            'tickets/bars/single-ticket-frontend-bar',
+            array(
+                'ticket' => $ticket
+            )
+        );
 
         renderer::render(
             'tickets/messages/ticket-messages',
