@@ -26,9 +26,9 @@ class frontend{
         );
 
         renderer::render(
-            'tickets/buttons/new-ticket-button',
+            'tickets/buttons/new-order-ticket-button',
             array(
-                'order_id' => $order->get_id()
+                'element_id' => $order->get_id()
             )
         );
         
@@ -36,23 +36,12 @@ class frontend{
 
 
     public static function new_ticket() {
-   /*     if(isset($_POST['calisia_ticket'])){
-            $ticket = data::save_post_to_ticket();
-            data::save_post_to_message($ticket->get_model()->get_id());
-        }*/
-    /*
-        renderer::render(
-            'tickets/forms/ticket-form',
-            array(
-                'order_id' => $_GET['order_id'],
-                'kind' => 'order'
-            )
-        );*/
+
         events::show_events();
 
         $args = array();
-        if(isset($_GET['order_id'])){
-            $args['order_id'] = $_GET['order_id'];
+        if(isset($_GET['element_id']) && isset($_GET['kind']) && $_GET['kind'] == 'order'){
+            $args['element_id'] = $_GET['element_id'];
             $args['kind'] = 'order';
         }
         $args['nonce'] = wp_create_nonce( 'calisia-ticket-new' );
@@ -73,6 +62,16 @@ class frontend{
         if(isset($_POST['calisia_ticket_new'])){
             $ticket = new ticket();
             $ticket->save_ticket('get_frontend_ticket_url');
+        }
+
+        if(isset($_POST['calisia_ticket_close'])){
+            $ticket = new ticket($_GET['id']);
+            $ticket->close();
+        }
+
+        if(isset($_POST['calisia_ticket_open'])){
+            $ticket = new ticket($_GET['id']);
+            $ticket->open();
         }
 
     }
@@ -127,5 +126,54 @@ class frontend{
                 'calisia_form_token' => Form_Token::create_token()
             )
         );
+
+        if($ticket->get_model()->get_status() != 'completed'){
+            renderer::render(
+                'tickets/forms/frontend-close-ticket-form',
+                array(
+                    'ticket_id' => $_GET['id'],
+                    'nonce' => wp_create_nonce( 'calisia-ticket-close-ticket-' . $_GET['id'] ),
+                    'calisia_form_token' => Form_Token::create_token('close-ticket')
+                )
+            );
+        }else{
+            renderer::render(
+                'tickets/forms/frontend-open-ticket-form',
+                array(
+                    'ticket_id' => $_GET['id'],
+                    'nonce' => wp_create_nonce( 'calisia-ticket-open-ticket-' . $_GET['id'] ),
+                    'calisia_form_token' => Form_Token::create_token('open-ticket')
+                )
+            );
+        }
+    }
+
+    public static function my_tickets( ){
+        require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/pagination.php';
+
+        $pagination = new pagination();
+        $pagination->set_page(isset($_GET['show-page']) ? $_GET['show-page'] : 1);
+        $tickets = data::get_customer_tickets(get_current_user_id(), $pagination);
+        $pagination->set_row_count($tickets['row_count']);
+
+        $ticket_list = '';
+        foreach($tickets['tickets'] as $ticket){
+            $ticket_list .= renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket), false);
+        }
+
+        renderer::render(
+            'tickets/buttons/new-default-ticket-button'
+        );
+
+        renderer::render(
+            'tickets/lists/ticket-list-container',
+            array(
+                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array(), false),
+                'ticket_list' => $ticket_list
+            )
+        );
+
+        $pagination->render();
+        
     }
 }

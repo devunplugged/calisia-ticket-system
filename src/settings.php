@@ -12,9 +12,13 @@ class settings{
 
     public static function register_settings() {
         register_setting( 'calisia-ticket-system-options', 'calisia_ticket_system_plugin_options' ); //, 'dbi_example_plugin_options_validate'
+
+        add_settings_section( 'main_settings', __( 'Main Settings', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
+        add_settings_field( 'calisia_ticket_system_reply_roles', __('calisia-cutomer-notes', 'calisia-ticket-system'), 'calisia_ticket_system\settings::reply_roles_input', 'calisia-ticket-system-settings-page', 'main_settings' );
+
         add_settings_section( 'integration_settings', __( 'Integration Settings', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
-    
         add_settings_field( 'calisia_ticket_system_customer_notes_integration', __('calisia-cutomer-notes', 'calisia-ticket-system'), 'calisia_ticket_system\settings::customer_notes_integration_input', 'calisia-ticket-system-settings-page', 'integration_settings' );
+        
         //add_settings_field( 'calisia_ticket_system_order_notes', __('Edit order page', 'calisia-ticket-system'), 'calisia_ticket_system\settings::order_notes_input', 'calisia-ticket-system-settings-page', 'integration_settings' );      
     }
 
@@ -23,7 +27,7 @@ class settings{
     }
     
     public static function order_notes_input() {
-        $options = get_option( 'calisia_ticket_system_plugin_options' );
+        //$options = get_option( 'calisia_ticket_system_plugin_options' );
         inputs::select(
             array(
                 'id' => 'calisia_ticket_system_order_notes',
@@ -40,7 +44,7 @@ class settings{
     }
 
     public static function customer_notes_integration_input() {
-        $options = get_option( 'calisia_ticket_system_plugin_options' );
+        //$options = get_option( 'calisia_ticket_system_plugin_options' );
         inputs::select(
             array(
                 'id' => 'calisia_ticket_system_customer_notes_integration',
@@ -56,4 +60,19 @@ class settings{
         );
     }
     
+    public static function reply_roles_input(){
+        inputs::input(
+            array(
+                'id' => 'calisia_ticket_system_reply_roles',
+                'name' => 'calisia_ticket_system_plugin_options[reply_roles]',
+                'class' => 'select',
+                'value' => options::get_option_value('reply_roles'),
+                'type' => 'text',
+                'label' => __('Role slugs capable of replaying to tickets. If left blank roles "administrator", "shop_manager" are used.', 'calisia-ticket-system')
+            ),
+            true
+        );
+
+        //print_r(options::get_replay_capable_roles());
+    }
 }

@@ -8,4 +8,14 @@ class default_object{
                 $this->$key = $value;
         }
     }
+
+    public static function get_models($results, $class_name){
+        $elements = array();
+        foreach($results as $result){
+            $element = new $class_name();
+            $element->get_model()->fill($result);
+            $elements[] = $element;
+        }
+        return $elements;
+    }
 }

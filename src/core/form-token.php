@@ -2,16 +2,21 @@
 namespace calisia_ticket_system;
 
 class Form_Token{
-    public static function create_token(){
+    public static function create_token($token_name = ''){
         //$_SESSION['calisia-form-token'] = self::generateRandomString();
-        update_user_meta(get_current_user_id(), 'calisia-form-token', self::generateRandomString());
-        return get_user_meta(get_current_user_id(), 'calisia-form-token', true );
+        $token_name = 'calisia-form-token_' . $token_name; 
+        update_user_meta(get_current_user_id(), $token_name, self::generateRandomString());
+        return get_user_meta(get_current_user_id(), $token_name, true );
     }
 
-    public static function check_token($token){
-        if($token == get_user_meta(get_current_user_id(), 'calisia-form-token', true ))
-            return true;
-        return false;
+    public static function check_token($token, $token_name = ''){
+        $token_name = 'calisia-form-token_' . $token_name;
+        $result = false;
+        if($token == get_user_meta(get_current_user_id(), $token_name, true ))
+            $result = true;
+        
+        delete_user_meta(get_current_user_id(), $token_name);
+        return $result;
     }
 
     public static function generateRandomString($length = 10) {

@@ -68,14 +68,7 @@ class ticket{
                )
             )
         );
-        $conversation = array();
-        foreach($results as $result){
-            $message = new message();
-            $message->get_model()->fill($result);
-            $conversation[] = $message;
-        }
-
-        return $conversation;
+        return default_object::get_models($results, 'calisia_ticket_system\message');
     }
 
     public function user_has_access($user_id){
@@ -98,47 +91,6 @@ class ticket{
         return $wpdb->update( $wpdb->prefix."calisia_ticket_system_message", array( 'seen' => 1 ), array( 'ticket_id' => $this->model->get_id() ), array( '%d' ), array( '%d' ));
     }
 
-/*
-    public function save(){
-        global $wpdb;
-        
-        $wpdb->insert( 
-            $wpdb->prefix . 'calisia_ticket_system_ticket', 
-            array( 
-                'title' => $this->model->get_title(),
-                'kind' => $this->model->get_kind(),
-                'added' => $this->model->get_added(), 
-                'user_id' => $this->model->get_user_id(), 
-                'added_by' => $this->model->get_added_by(),
-                'element_id' => $this->model->get_element_id()
-            ) 
-        );
-        $this->model->set_id($wpdb->insert_id);
-        //self::save_message($ticket_id);
-    }
-*/
-    /*
-
-    public function update(){
-        global $wpdb;
-
-        return $wpdb->update( 
-            $wpdb->prefix."calisia_ticket_system_ticket", 
-            array( 
-                'title' => $this->model->set_title(), 
-                'kind' => $this->model->set_kind(), 
-                'added' => $this->model->set_added(), 
-                'user_id' => $this->model->set_user_id(), 
-                'element_id' => $this->model->set_element_id(), 
-                'seen' => $this->model->set_seen(), 
-                'status' => $this->model->set_status(),
-                'deleted' => $this->model->set_deleted()
-            ), 
-            array( 'id' => $this->model->id() ), 
-            array( '%s', '%s', '%s', '%d', '%d', '%d', '%s' ), 
-            array( '%d' )
-        );
-    }*/
 
     public function delete(){
         $this->model->set_deleted(1);
@@ -146,58 +98,122 @@ class ticket{
     }
 
     public function save_ticket($redirect_url_callback = 'get_frontend_ticket_url'){
-        if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-new')){
-
-            if(Form_Token::check_token($_POST['calisia_form_token'])){
-                try{
-                    $uploaded_files = uploader::save_uploaded_files();
-                }catch(\Exception $e) {
-                    events::add_event($e->getMessage(), 'danger');
-                    $this->model->set_element_id($_GET['order_id']);
-                    wp_redirect( $this->get_frontend_new_ticket_url() );
-                    exit;
-                    return;
-                }
-                $ticket = data::save_post_to_ticket();
-                $message = data::save_post_to_message($ticket->model->get_id());
-                data::save_uploads($message->get_model()->get_id(), $uploaded_files);
-                $this->model->set_id($ticket->model->get_id());
-            }else{
-                events::add_event(__('This message has been saved already','calisia-ticket-system'), 'warning');
-            }
-            
-        }else{
-            events::add_event(__('Unexpected error','calisia-ticket-system'), 'danger');
+        if(!is_user_logged_in()){
+            events::add_event(__('You have to be logged in','calisia-ticket-system'), 'danger');
+            $this->redirect_to_new_ticket_form();
+            exit;
         }
+
+        if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-new', $_POST['calisia_form_token'], '')){
+            wp_redirect( $this->redirect_to_new_ticket_form() );
+            exit;
+        }
+
+        try{
+            $uploaded_files = uploader::save_uploaded_files();
+        }catch(\Exception $e) {
+            events::add_event($e->getMessage(), 'danger');
+            $this->redirect_to_new_ticket_form();
+            exit;
+        }
+        $ticket = data::save_post_to_ticket();
+        $message = data::save_post_to_message($ticket->model->get_id());
+        data::save_uploads($message->get_model()->get_id(), $uploaded_files);
+        $this->model->set_id($ticket->model->get_id());
 
         wp_redirect( $ticket->$redirect_url_callback() );
         exit;
     }
 
     public function save_reply($redirect_url_callback = 'get_frontend_ticket_url'){
-        if(wp_verify_nonce( $_POST['calisia_nonce'], 'calisia-ticket-reply-' . $this->model->get_id() )){
-
-            if(Form_Token::check_token($_POST['calisia_form_token'])){
-                try{
-                    $uploaded_files = uploader::save_uploaded_files();
-                }catch(\Exception $e) {
-                    events::add_event($e->getMessage(), 'danger');
-                    wp_redirect( $this->$redirect_url_callback() );
-                    exit;
-                    return;
-                }
-                $message = data::save_post_to_message($this->model->get_id());
-                data::save_uploads($message->model->get_id(), $uploaded_files);
-            }else{
-                events::add_event(__('This message has been saved already','calisia-ticket-system'), 'warning');
-            }
-            
-        }else{
-            events::add_event(__('Unexpected error','calisia-ticket-system'), 'danger');
+        if(!$this->user_validation()){
+            wp_redirect( $this->$redirect_url_callback() );
+            exit;
         }
+
+        if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-reply-'.$this->model->get_id(), $_POST['calisia_form_token'], '')){
+            wp_redirect( $this->$redirect_url_callback() );
+            exit;
+        }
+
+        try{
+            $uploaded_files = uploader::save_uploaded_files();
+        }catch(\Exception $e) {
+            events::add_event($e->getMessage(), 'danger');
+            wp_redirect( $this->$redirect_url_callback() );
+            exit;
+            return;
+        }
+        $message = data::save_post_to_message($this->model->get_id());
+        data::save_uploads($message->get_model()->get_id(), $uploaded_files);
 
         wp_redirect( $this->$redirect_url_callback() );
         exit;
+    }
+
+    public function close($redirect_url_callback = 'get_frontend_ticket_url'){
+        if(!$this->user_validation()){
+            wp_redirect( $this->$redirect_url_callback() );
+            exit;
+        }
+
+        if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-close-ticket-'.$this->model->get_id(), $_POST['calisia_form_token'], 'close-ticket')){
+            wp_redirect( $this->$redirect_url_callback() );
+            exit;
+        }
+
+        $this->model->set_status('completed');
+        $this->model->update();
+
+        wp_redirect( $this->$redirect_url_callback() );
+        exit;
+    }
+
+    public function open($redirect_url_callback = 'get_frontend_ticket_url'){
+        if(!$this->user_validation()){
+            wp_redirect( $this->$redirect_url_callback() );
+            exit;
+        }
+
+        if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-open-ticket-'.$this->model->get_id(), $_POST['calisia_form_token'], 'open-ticket')){
+            wp_redirect( $this->$redirect_url_callback() );
+            exit;
+        }
+
+        $this->model->set_status('opened');
+        $this->model->update();
+
+        wp_redirect( $this->$redirect_url_callback() );
+        exit;
+    }
+
+    private function basic_form_validation($nonce_value, $nonce_name, $token_value, $token_name){
+        $ok = true;
+        if(wp_verify_nonce( $nonce_value, $nonce_name )){
+            if(!Form_Token::check_token($token_value, $token_name)){
+                events::add_event(__('This form has been saved already','calisia-ticket-system'), 'warning');
+                $ok = false;
+            }  
+        }else{
+            events::add_event(__('Unexpected error','calisia-ticket-system'), 'danger');
+            $ok = false;
+        }
+        return $ok;
+    }
+
+    private function user_validation(){
+        
+        if($this->user_has_access(get_current_user_id())){
+            return true;
+        }
+
+        $user = wp_get_current_user();
+        if ( array_intersect( options::get_replay_capable_roles(), $user->roles ) ) {
+            return true;
+        }
+
+        events::add_event(__('You have no access to this action','calisia-ticket-system'), 'danger');
+        return false;
     }
 
     public function get_backend_ticket_url(){
@@ -208,8 +224,18 @@ class ticket{
         return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-show-ticket/?id=' . $this->model->get_id();
     }
 
-    public function get_frontend_new_ticket_url(){
-        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-new-ticket/?order_id=' . $args['order_id'];
+    public function get_frontend_new_ticket_url($kind = '', $element_id = ''){
+        if($attr)
+            return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-new-ticket/?kind='.$kind.'&element_id'. $element_id;
+        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-new-ticket/';
+    }
+
+    public function redirect_to_new_ticket_form(){
+        if(isset($_GET['element_id'])){
+            wp_redirect( $this->get_frontend_new_ticket_url($_GET['kind'], $_GET['element_id']));
+        }else{
+            wp_redirect( $this->get_frontend_new_ticket_url());
+        }
     }
 
     public function get_frontend_order_url(){

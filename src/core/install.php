@@ -9,6 +9,14 @@ class install{
         if ( get_site_option( 'calisia_ticket_system' ) != self::$db_version ) {
             self::db_install();
         }
+        
+    }
+    //should run once after adding my-account endpoint
+    public static function flush_permalinks(){
+        if(!get_option('calisia_ticket_system_permalinks_flushed')){
+            flush_rewrite_rules(false);
+            update_option('calisia_ticket_system_permalinks_flushed', 1);
+        }
     }
 
     public static function db_install() {

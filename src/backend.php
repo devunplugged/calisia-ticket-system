@@ -8,8 +8,8 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/raw.php';
 class backend{
     public static function my_admin_menu() {
         add_menu_page(
-            __( 'Calisia Tickets', 'my-textdomain' ),
-            __( 'Tickets', 'my-textdomain' ),
+            __( 'Calisia Tickets', 'calisia-ticket-system' ),
+            __( 'Tickets', 'calisia-ticket-system' ),
             'manage_options',
             'calisia-tickets',
             'calisia_ticket_system\backend::my_admin_page_contents',

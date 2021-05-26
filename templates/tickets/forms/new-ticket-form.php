@@ -2,10 +2,10 @@
     <input type="text" name="title"><br>
     
 
-    <?php if(isset($args['order_id'])){ ?>
-        <input type="text" value="<?php printf(__( 'Order: #%1$s', 'calisia-ticket-system' ), $args['order_id']); ?>" disabled>
+    <?php if(isset($args['kind']) && $args['kind'] == 'order'){ ?>
+        <input type="text" value="<?php printf(__( 'Order: #%1$s', 'calisia-ticket-system' ), $args['element_id']); ?>" disabled>
         <input type="hidden" name="kind" value="<?php echo $args['kind']; ?>">
-        <input type="hidden" name="element_id" value="<?php echo $args['order_id']; ?>">
+        <input type="hidden" name="element_id" value="<?php echo $args['element_id']; ?>">
     <?php }else{ ?>
         <select name="kind">
             <option value="other"><?php _e('Other','calisia-ticket-system'); ?></option>

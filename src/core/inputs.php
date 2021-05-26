@@ -3,6 +3,15 @@ namespace calisia_ticket_system;
 
 class inputs{
 
+    public static function input($options, $output = false){
+        $input = '<div><label>'.$options['label'].'</label></div>';
+        $input .= '<input type="'.$options['type'].'" id="'.$options['id'].'" name="'.$options['name'].'" class="'.$options['class'].'" value="'.$options['value'].'">';
+        if(!$output)
+            return $input;
+
+        echo $input;
+    }
+
     public static function textarea($options, $output = false){
         $ta = '<label>'.$options['label'].'</label>';
         $ta .= '<textarea placeholder="'.$options['placeholder'].'" id="'.$options['id'].'" name="'.$options['id'].'" class="'.$options['class'].'">';

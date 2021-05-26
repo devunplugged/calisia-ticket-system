@@ -3,12 +3,20 @@
 }
 
 .mt-20{
-    margin-top: 20px;
+    margin-top: 20px !important;
 }
+
 .mb-20{
     margin-bottom: 20px;
 }
 
+.w-100{
+    width:100%;
+}
+
+.text-center{
+    text-align: center;
+}
 .calisia-ticket-llist-title-bar{
     background: #fbfbfb;
     margin-top: 20px;
@@ -42,3 +50,4 @@
     justify-content: space-between;
     flex-wrap: wrap;
 }
+

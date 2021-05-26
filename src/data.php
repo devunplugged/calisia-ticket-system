@@ -2,51 +2,6 @@
 namespace calisia_ticket_system;
 
 class data{
-   /* public static function save_ticket($user_id){
-        global $wpdb;
-        
-        $wpdb->insert( 
-            $wpdb->prefix . 'calisia_ticket_system_ticket', 
-            array( 
-                'title' => $_POST['title'],
-                'kind' => $_POST['kind'],
-                'added' => current_time( 'mysql' ), 
-                'user_id' => $user_id, 
-                'added_by' => get_current_user_id(),
-                'element_id' => $_POST['order_id']
-            ) 
-        );
-        $ticket_id = $wpdb->insert_id;
-        self::save_message($ticket_id);
-    }
-
-    public static function save_message($ticket_id, $uploaded_files = array()){
-        global $wpdb;
-        $result = $wpdb->insert( 
-            $wpdb->prefix . 'calisia_ticket_system_message', 
-            array( 
-                'ticket_id' => $ticket_id,
-                'added' => current_time( 'mysql' ), 
-                'text' => wp_kses_post( stripslashes($_POST['msg'])), 
-                'added_by' => get_current_user_id()
-            ) 
-        );
-        $message_id = $wpdb->insert_id;
-
-        foreach($uploaded_files as $uploaded_file){
-
-            $wpdb->insert( 
-                $wpdb->prefix . 'calisia_ticket_system_file', 
-                array( 
-                    'message_id' => $message_id,
-                    'file_name' => $uploaded_file['name'],
-                    'file_path' => $uploaded_file['path'],
-                    'added' => current_time( 'mysql' ), 
-                    'added_by' => get_current_user_id()
-                ) 
-            );
-        }
-    }*/
 
     public static function get_number_of_uploads($user_id, $hours = 1){
         $since = time() - ($hours * 3600);
@@ -71,7 +26,7 @@ class data{
 
         $results = $wpdb->get_results(
             $wpdb->prepare(
-            "SELECT * FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE kind = %s AND user_id = %d AND element_id = %d ORDER BY id",
+            "SELECT * FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE kind = %s AND user_id = %d AND element_id = %d ORDER BY id DESC",
             array(
                 $kind,
                 $user_id,
@@ -80,15 +35,28 @@ class data{
             )
         );
 
-        $tickets = array();
-        foreach($results as $result){
-            $ticket = new ticket();
-            $ticket->get_model()->fill($result);
-            $tickets[] = $ticket;
-        }
-
-        return $tickets;
+        return default_object::get_models($results, 'calisia_ticket_system\ticket');
     }
+
+    public static function get_customer_tickets($user_id, $pagination){
+        global $wpdb;
+
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS  * FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE user_id = %d ORDER BY id DESC LIMIT %d, %d",
+            array(
+                $user_id,
+                $pagination->get_offset(), 
+                $pagination->get_limit()
+               )
+            )
+        );
+        $found_rows_number = $wpdb->get_results('SELECT FOUND_ROWS() as found_rows');
+        $tickets = default_object::get_models($results, 'calisia_ticket_system\ticket');
+        return array('tickets' => $tickets, 'row_count' => $found_rows_number[0]->found_rows);
+    }
+
+    
 
     public static function get_message_attachments($message_id){
         global $wpdb;

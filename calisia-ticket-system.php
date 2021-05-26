@@ -18,6 +18,7 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/uploader.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/inputs.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/events.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/options.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/endpoint.php';
 
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/data.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/backend.php';
@@ -64,3 +65,9 @@ add_action( 'admin_init', 'calisia_ticket_system\backend::save_forms' );
 //settings page 
 add_action( 'admin_menu', 'calisia_ticket_system\settings::add_settings_page' );
 add_action( 'admin_init', 'calisia_ticket_system\settings::register_settings' );
+
+//my-account endpoint
+add_filter ( 'woocommerce_account_menu_items', 'calisia_ticket_system\endpoint::menu_link', 40 );
+add_action( 'init', 'calisia_ticket_system\endpoint::add_endpoint' );
+add_action( 'woocommerce_account_calisia-tickets_endpoint', 'calisia_ticket_system\endpoint::endpoint_content' );
+add_action( 'init', 'calisia_ticket_system\install::flush_permalinks', 20);
