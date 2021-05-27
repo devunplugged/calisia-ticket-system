@@ -70,7 +70,7 @@ class panels{
                                 'options' => array(
                                     __('Opened', 'calisia-ticket-system') => 'opened',
                                     __('Onhold', 'calisia-ticket-system') => 'onhold',
-                                    __('Awating Reply', 'calisia-ticket-system') => 'awatingreply',
+                                    __('Awaiting Reply', 'calisia-ticket-system') => 'awaitingreply',
                                     __('Complete', 'calisia-ticket-system') => 'completed'
                                 ),
                                 'value' => $ticket_status

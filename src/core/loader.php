@@ -25,12 +25,14 @@ class loader{
 
         //include_once WC_ABSPATH . 'includes/admin/class-wc-admin.php';
 
-        wp_enqueue_script('calisia-ticket-system-js', CALISIA_TICKET_SYSTEM_URL . 'js/calisia-ticket-system-js.js');
+        
 
 
         if ( strpos(get_current_screen()->base, 'calisia-tickets') === false) {
             return;
         }
+
+        wp_enqueue_script('calisia-ticket-system-js', CALISIA_TICKET_SYSTEM_URL . 'js/calisia-ticket-system-backend.js');
         
         if(!isset($_GET['id']))
             return;

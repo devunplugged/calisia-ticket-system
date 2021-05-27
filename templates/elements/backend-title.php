@@ -1,0 +1,1 @@
+<h1 class="wp-heading-inline"><?php echo $args['title']; ?></h1>

@@ -2,6 +2,26 @@
 namespace calisia_ticket_system;
 
 class data{
+    public static function get_users($phrase){
+        global $wpdb;
+
+        return $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT u.*, um1.meta_value as first_name, um2.meta_value as last_name 
+            FROM wp_users as u 
+            LEFT JOIN wp_usermeta as um1 ON u.ID = um1.user_id 
+            LEFT JOIN wp_usermeta as um2 ON u.ID = um2.user_id 
+            WHERE um1.meta_key = 'first_name' AND um2.meta_key = 'last_name' AND 
+            (u.user_login LIKE %s OR u.user_email LIKE %s OR um1.meta_value LIKE %s OR um2.meta_value LIKE %s)",
+            array(
+                $phrase,
+                $phrase,
+                $phrase,
+                $phrase
+               )
+            )
+        );
+    }
 
     public static function get_number_of_uploads($user_id, $hours = 1){
         $since = time() - ($hours * 3600);

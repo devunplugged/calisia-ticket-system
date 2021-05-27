@@ -31,7 +31,7 @@ class controls{
                                                 __('All', 'calisia-ticket-system') => 'all',
                                                 __('Opened', 'calisia-ticket-system') => 'opened',
                                                 __('Onhold', 'calisia-ticket-system') => 'onhold',
-                                                __('Awaiting Reply', 'calisia-ticket-system') => 'awatingreply',
+                                                __('Awaiting Reply', 'calisia-ticket-system') => 'awaitingreply',
                                                 __('Completed', 'calisia-ticket-system') => 'completed'
                                             ),
                                             'value' => isset($_GET['status']) ? $_GET['status'] : 'all'

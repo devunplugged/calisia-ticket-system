@@ -5,6 +5,7 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/controls.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/panels.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/raw.php';
 
+
 class backend{
     public static function my_admin_menu() {
         add_menu_page(
@@ -70,12 +71,51 @@ class backend{
         renderer::render('containers/backend-settings-container', $params);
     }
 
+    public static function new_ticket(){
+ 
+        renderer::render(
+            'tickets/forms/backend-new-ticket-form',
+            array(
+                'status-select' => inputs::select(
+                                                array(
+                                                    'id' => 'status-select',
+                                                    'name' => 'status',
+                                                    'class' => 'select',
+                                                    'options' => array(
+                                                        __('Opened', 'calisia-ticket-system') => 'opened',
+                                                        __('On-hold', 'calisia-ticket-system') => 'onhold',
+                                                        __('Awaiting Reply', 'calisia-ticket-system') => 'awaitingreply',
+                                                        __('Completed', 'calisia-ticket-system') => 'competed'
+                                                    ),
+                                                    'value' => ''
+                                                )
+                                            ),
+                'kind-select' => inputs::select(
+                                                array(
+                                                    'id' => 'kind-select',
+                                                    'name' => 'kind',
+                                                    'class' => 'select',
+                                                    'options' => array(
+                                                        __('Other', 'calisia-ticket-system') => 'other',
+                                                        __('Order', 'calisia-ticket-system') => 'order'
+                                                    ),
+                                                    'value' => ''
+                                                )
+                                            ),
+                'nonce' => wp_create_nonce( 'calisia-ticket-new-ticket' ),
+                'token' => Form_Token::create_token('new-ticket')
+            )
+        );
 
+    }
 
     public static function my_admin_page_contents() {
         if(isset($_GET['id'])){
             self::single_ticket();
+        }elseif(isset($_GET['new'])){
+            self::new_ticket();
         }else{
+            renderer::render('elements/backend-title',array('title' => __('Tickets','calisia-ticket-system')));
             echo elements\panels::user_tickets_table();
         }
     }
