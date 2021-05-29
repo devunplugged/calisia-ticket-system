@@ -204,4 +204,34 @@
   max-width: 100%;
   min-width: 0 !important;
 }
+
+.ticket-form-row {
+  padding: 10px;
+}
+
+.suggestion-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.suggestion-row {
+  padding: 10px;
+}
+
+.suggestion-row:nth-child(odd) {
+  background-color: whitesmoke;
+}
+
+.suggestion-row:hover {
+  background: #d3e2b5;
+}
+
+.suggestion-row-element {
+  width: 20%;
+  text-align: center;
+}
 /*# sourceMappingURL=calisia_ticket_system.css.map */

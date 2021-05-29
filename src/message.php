@@ -14,4 +14,25 @@ class message{
         $this->model = new models\message();
     }
 
+    public function get_attachments(){
+        global $wpdb;
+
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT * FROM ".$wpdb->prefix."calisia_ticket_system_file WHERE message_id = %d",
+            array(
+                $this->model->get_id()
+               )
+            )
+        );
+
+        $attachments = array();
+        foreach($results as $result){
+            $file = new file();
+            $file->get_model()->fill($result);
+            $attachments[] = $file;
+        }
+
+        return $attachments;
+    }
 }

@@ -4,7 +4,12 @@ namespace calisia_ticket_system;
 class uploader{
     public static function save_uploaded_files(){
         
-        $files_count = count($_FILES['calisia_file_upload']['name']);
+        $files_count = count(array_filter($_FILES['calisia_file_upload']['name']));
+        $uploaded_files = array();
+
+        if($files_count == 0)
+            return $uploaded_files;
+
         if($files_count > 5){
             throw new \Exception('Maximum number of files (5) exceeded');
         }
@@ -12,7 +17,7 @@ class uploader{
         if(data::get_number_of_uploads(get_current_user_id()) >= 10){
             throw new \Exception('Maximum number of uploads exceeded. Try again later.');
         }
-        $uploaded_files = array();
+        
 
         for($i=0; $i<$files_count; $i++){
             //Get the temp file path

@@ -2,6 +2,29 @@
 namespace calisia_ticket_system;
 
 class data{
+    public static function get_user_orders($phrase, $user_id){
+        global $wpdb;
+
+        return $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT pm1.meta_value AS user_id, pm1.post_id AS order_id, pm2.meta_value AS order_total, p.post_date AS order_date, p.post_status AS order_status
+            FROM wp_posts AS p 
+            LEFT JOIN wp_postmeta AS pm1 ON pm1.post_id = p.ID 
+            LEFT JOIN wp_postmeta AS pm2 ON pm2.post_id = p.ID
+            WHERE 
+            p.post_type = 'shop_order' AND
+            pm1.meta_key = '_customer_user' AND
+            pm1.meta_value = %d AND
+            pm2.meta_key = '_order_total' AND
+            pm1.post_id LIKE %s",
+            array(
+                $user_id,
+                $phrase
+               )
+            )
+        );
+    }
+
     public static function get_users($phrase){
         global $wpdb;
 
@@ -77,7 +100,7 @@ class data{
     }
 
     
-
+/*
     public static function get_message_attachments($message_id){
         global $wpdb;
 
@@ -98,7 +121,7 @@ class data{
         }
 
         return $attachments;
-    }
+    }*/
 /*
     public static function validate_tickets_sort($order_by){
 
@@ -164,11 +187,11 @@ class data{
         $ticket->get_model()->set_title($_POST['title']);
         $ticket->get_model()->set_kind($_POST['kind']);
         $ticket->get_model()->set_added(current_time( 'mysql' ));
-        $ticket->get_model()->set_user_id(get_current_user_id());
+        $ticket->get_model()->set_user_id( isset($_POST['user_id']) ? $_POST['user_id'] : get_current_user_id() );
         $ticket->get_model()->set_added_by(get_current_user_id()); 
         $ticket->get_model()->set_element_id($_POST['element_id']); 
         $ticket->get_model()->set_seen(0); 
-        $ticket->get_model()->set_status('opened'); 
+        $ticket->get_model()->set_status( isset($_POST['status']) ? $_POST['status'] : 'opened' ); 
         $ticket->get_model()->set_deleted(0); 
         $ticket->get_model()->save();
         return $ticket;

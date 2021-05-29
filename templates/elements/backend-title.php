@@ -1,1 +1,1 @@
-<h1 class="wp-heading-inline"><?php echo $args['title']; ?></h1>
+<div class="wrap"><h1 class="wp-heading-inline"><?php echo $args['title']; ?></h1> <?php echo isset($args['button']) ? $args['button'] : ''; ?></div>

@@ -98,7 +98,7 @@ class frontend{
                 'tickets/messages/ticket-message',
                 array(
                     'message' => $message,
-                    'attachments' => data::get_message_attachments($message->get_model()->get_id())
+                    'attachments' => $message->get_attachments()
                 ),
                 false
             );

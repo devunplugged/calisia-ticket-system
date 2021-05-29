@@ -29,7 +29,7 @@ class panels{
         );
     }
 
-    public static function ticket_conversation($messages, $ticket_id){
+    public static function ticket_conversation($messages, $ticket){
         return cts\renderer::render(
             'elements/backend-conversation',
             array(
@@ -43,12 +43,13 @@ class panels{
                 'reply-form' => cts\renderer::render(
                                     'tickets/forms/backend-reply-form',
                                     array(
-                                        'ticket_id' => $ticket_id,
-                                        'nonce' => wp_create_nonce( 'calisia-ticket-reply-' . $ticket_id ),
+                                        'ticket_id' => $ticket->get_model()->get_id(),
+                                        'nonce' => wp_create_nonce( 'calisia-ticket-reply-' . $ticket->get_model()->get_id() ),
                                         'calisia_form_token' => cts\Form_Token::create_token()
                                     ),
                                     false
-                                )
+                                ),
+                'title' => $ticket->get_model()->get_title()
             ),
             false
         );
@@ -71,7 +72,7 @@ class panels{
                                     __('Opened', 'calisia-ticket-system') => 'opened',
                                     __('Onhold', 'calisia-ticket-system') => 'onhold',
                                     __('Awaiting Reply', 'calisia-ticket-system') => 'awaitingreply',
-                                    __('Complete', 'calisia-ticket-system') => 'completed'
+                                    __('Completed', 'calisia-ticket-system') => 'completed'
                                 ),
                                 'value' => $ticket_status
                             )
@@ -89,6 +90,16 @@ class panels{
             'elements/backend-order',
             array(
                 'order' => $order
+            ),
+            false
+        );
+    }
+
+    public static function new_ticket(){
+        return cts\renderer::render(
+            'elements/backend-panel',
+            array(
+                'content' => raw::new_ticket()
             ),
             false
         );

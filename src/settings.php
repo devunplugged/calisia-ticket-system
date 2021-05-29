@@ -19,6 +19,10 @@ class settings{
         add_settings_section( 'integration_settings', __( 'Integration Settings', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
         add_settings_field( 'calisia_ticket_system_customer_notes_integration', __('calisia-cutomer-notes', 'calisia-ticket-system'), 'calisia_ticket_system\settings::customer_notes_integration_input', 'calisia-ticket-system-settings-page', 'integration_settings' );
         
+        add_settings_section( 'email_template_settings', __( 'Email template', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
+        add_settings_field( 'calisia_ticket_system_email_header_path', __('Header', 'calisia-ticket-system'), 'calisia_ticket_system\settings::email_header_template_input', 'calisia-ticket-system-settings-page', 'email_template_settings' );
+        add_settings_field( 'calisia_ticket_system_email_footer_path', __('Footer', 'calisia-ticket-system'), 'calisia_ticket_system\settings::email_footer_template_input', 'calisia-ticket-system-settings-page', 'email_template_settings' );
+        
         //add_settings_field( 'calisia_ticket_system_order_notes', __('Edit order page', 'calisia-ticket-system'), 'calisia_ticket_system\settings::order_notes_input', 'calisia-ticket-system-settings-page', 'integration_settings' );      
     }
 
@@ -69,6 +73,38 @@ class settings{
                 'value' => options::get_option_value('reply_roles'),
                 'type' => 'text',
                 'label' => __('Role slugs capable of replaying to tickets. If left blank roles "administrator", "shop_manager" are used.', 'calisia-ticket-system')
+            ),
+            true
+        );
+
+        //print_r(options::get_replay_capable_roles());
+    }
+
+    public static function email_header_template_input(){
+        inputs::input(
+            array(
+                'id' => 'calisia_ticket_system_email_header_path',
+                'name' => 'calisia_ticket_system_plugin_options[email_header_path]',
+                'class' => 'select',
+                'value' => options::get_option_value('email_header_path'),
+                'type' => 'text',
+                'label' => __('Path to email header template. If left blank "/wp-content/plugins/woocommerce/templates/emails/email-header.php" is used.', 'calisia-ticket-system')
+            ),
+            true
+        );
+
+        //print_r(options::get_replay_capable_roles());
+    }
+
+    public static function email_footer_template_input(){
+        inputs::input(
+            array(
+                'id' => 'calisia_ticket_system_email_footer_path',
+                'name' => 'calisia_ticket_system_plugin_options[email_footer_path]',
+                'class' => 'select',
+                'value' => options::get_option_value('email_footer_path'),
+                'type' => 'text',
+                'label' => __('Path to email footer template. If left blank "/wp-content/plugins/woocommerce/templates/emails/email-footer.php" is used.', 'calisia-ticket-system')
             ),
             true
         );

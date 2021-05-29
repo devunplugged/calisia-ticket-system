@@ -41,6 +41,10 @@ class backend{
         if(isset($_POST['calisia_ticket_status'])){
             self::update_ticket_status();
         }
+        if(isset($_POST['calisia_ticket_new'])){
+            $ticket = new ticket();
+            $ticket->save_ticket('get_backend_ticket_url');
+        }
     }
 
     public static function single_ticket(){
@@ -59,7 +63,7 @@ class backend{
 
         $params = array();
         $params['title-bar'] = elements\panels::ticket_title_bar($ticket->get_model()->get_id(), $ticket->get_model()->get_status());
-        $params['conversation'] = elements\panels::ticket_conversation($messages, $ticket->get_model()->get_id());
+        $params['conversation'] = elements\panels::ticket_conversation($messages, $ticket);
         $params['user'] = elements\panels::user_info($ticket->get_model()->get_user_id());
         $params['other_tickets_table'] = elements\panels::user_tickets_table($ticket->get_model()->get_user_id());
 
@@ -72,40 +76,9 @@ class backend{
     }
 
     public static function new_ticket(){
- 
-        renderer::render(
-            'tickets/forms/backend-new-ticket-form',
-            array(
-                'status-select' => inputs::select(
-                                                array(
-                                                    'id' => 'status-select',
-                                                    'name' => 'status',
-                                                    'class' => 'select',
-                                                    'options' => array(
-                                                        __('Opened', 'calisia-ticket-system') => 'opened',
-                                                        __('On-hold', 'calisia-ticket-system') => 'onhold',
-                                                        __('Awaiting Reply', 'calisia-ticket-system') => 'awaitingreply',
-                                                        __('Completed', 'calisia-ticket-system') => 'competed'
-                                                    ),
-                                                    'value' => ''
-                                                )
-                                            ),
-                'kind-select' => inputs::select(
-                                                array(
-                                                    'id' => 'kind-select',
-                                                    'name' => 'kind',
-                                                    'class' => 'select',
-                                                    'options' => array(
-                                                        __('Other', 'calisia-ticket-system') => 'other',
-                                                        __('Order', 'calisia-ticket-system') => 'order'
-                                                    ),
-                                                    'value' => ''
-                                                )
-                                            ),
-                'nonce' => wp_create_nonce( 'calisia-ticket-new-ticket' ),
-                'token' => Form_Token::create_token('new-ticket')
-            )
-        );
+        renderer::render('elements/backend-title', array('title' => __('New Ticket','calisia-ticket-system')));
+        events::show_events();
+        echo elements\panels::new_ticket();
 
     }
 
@@ -115,7 +88,13 @@ class backend{
         }elseif(isset($_GET['new'])){
             self::new_ticket();
         }else{
-            renderer::render('elements/backend-title',array('title' => __('Tickets','calisia-ticket-system')));
+            renderer::render(
+                'elements/backend-title',
+                array(
+                    'title' => __('Tickets','calisia-ticket-system'), 
+                    'button' => renderer::render('tickets/buttons/backend-new-ticket-button', array(), false)
+                )
+            );
             echo elements\panels::user_tickets_table();
         }
     }

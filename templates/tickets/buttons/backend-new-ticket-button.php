@@ -1,0 +1,1 @@
+<a href="<?php echo menu_page_url( 'calisia-tickets', false ).'&new=ticket'; ?>" class="page-title-action"><?php _e('New Ticket','calisia-ticket-system'); ?></a>
