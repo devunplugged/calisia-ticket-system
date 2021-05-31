@@ -23,7 +23,8 @@ class settings{
         add_settings_field( 'calisia_ticket_system_email_header_path', __('Header', 'calisia-ticket-system'), 'calisia_ticket_system\settings::email_header_template_input', 'calisia-ticket-system-settings-page', 'email_template_settings' );
         add_settings_field( 'calisia_ticket_system_email_footer_path', __('Footer', 'calisia-ticket-system'), 'calisia_ticket_system\settings::email_footer_template_input', 'calisia-ticket-system-settings-page', 'email_template_settings' );
         
-        //add_settings_field( 'calisia_ticket_system_order_notes', __('Edit order page', 'calisia-ticket-system'), 'calisia_ticket_system\settings::order_notes_input', 'calisia-ticket-system-settings-page', 'integration_settings' );      
+        add_settings_section( 'support_settings', __( 'Support', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
+        add_settings_field( 'calisia_ticket_system_support_email', __('Suppoer e-mail address', 'calisia-ticket-system'), 'calisia_ticket_system\settings::support_email_input', 'calisia-ticket-system-settings-page', 'support_settings' );
     }
 
     public static function section_text() {
@@ -105,6 +106,22 @@ class settings{
                 'value' => options::get_option_value('email_footer_path'),
                 'type' => 'text',
                 'label' => __('Path to email footer template. If left blank "/wp-content/plugins/woocommerce/templates/emails/email-footer.php" is used.', 'calisia-ticket-system')
+            ),
+            true
+        );
+
+        //print_r(options::get_replay_capable_roles());
+    }
+
+    public static function support_email_input(){
+        inputs::input(
+            array(
+                'id' => 'calisia_ticket_system_support_email',
+                'name' => 'calisia_ticket_system_plugin_options[support_email]',
+                'class' => 'select',
+                'value' => options::get_option_value('support_email'),
+                'type' => 'text',
+                'label' => __('Support email address. Used to send notifications about new tickets and replys.', 'calisia-ticket-system')
             ),
             true
         );

@@ -50,7 +50,7 @@ add_action( 'woocommerce_account_calisia-show-ticket_endpoint', 'calisia_ticket_
 add_action( 'woocommerce_order_details_after_customer_details', 'calisia_ticket_system\frontend::order_tickets', 20, 1);
 
 //add admin menu page
-add_action( 'admin_menu', 'calisia_ticket_system\backend::my_admin_menu' );
+add_action( 'admin_menu', 'calisia_ticket_system\backend::my_admin_menu', 1 );
 
 //load css and js files in backend (admin)
 add_action('admin_enqueue_scripts', 'calisia_ticket_system\loader::load_css', 20);

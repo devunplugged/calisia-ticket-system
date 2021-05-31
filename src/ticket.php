@@ -108,14 +108,16 @@ class ticket{
             exit;
         }
 
-        if(!$this->user_validation()){
-            if($redirect_url_callback == 'get_frontend_ticket_url'){
-                $this->redirect_to_new_ticket_form();
-            }else{
+        //check if user is valid only when requst is comming from backend
+        //every user that is logged in can open new ticket
+        if($redirect_url_callback != 'get_frontend_ticket_url'){
+            if(!$this->user_validation()){
                 wp_redirect( $this->get_backend_new_ticket_url() );
+                exit;
             }
-            exit;
         }
+            
+        
 
         if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-new', $_POST['calisia_form_token'], '')){
             if($redirect_url_callback == 'get_frontend_ticket_url'){
@@ -142,11 +144,13 @@ class ticket{
         data::save_uploads($message->get_model()->get_id(), $uploaded_files);
         $this->model->set_id($ticket->model->get_id());
 
-        //send email when someone else than user resopnds
-        if($this->get_model()->get_user_id() != get_current_user_id()){
-            require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-message.php';
-            $email = new email_message();
-            $email->send_reply_to_user($message);
+        require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-message.php';
+        $email = new email_message();
+        //send email when someone else than user resopnds, otherwise send notification to support
+        if($ticket->model->get_user_id() != get_current_user_id()){
+            $email->send_notification_to_client($message);
+        }else{
+            $email->send_notification_to_support($message);
         }
 
         wp_redirect( $ticket->$redirect_url_callback() );
@@ -175,11 +179,19 @@ class ticket{
         $message = data::save_post_to_message($this->model->get_id());
         data::save_uploads($message->get_model()->get_id(), $uploaded_files);
 
-        //send email when someone else than user resopnds
-        if($this->get_model()->get_user_id() != get_current_user_id()){
-            require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-message.php';
-            $email = new email_message();
-            $email->send_reply_to_user($message);
+        require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-message.php';
+        $email = new email_message();
+        //send email when someone else than user resopnds, otherwise send notification to support
+        if($this->get_model()->get_user_id() != get_current_user_id()){ 
+            //support responded
+            $email->send_notification_to_client($message);
+        }else{
+            //client responded
+            $email->send_notification_to_support($message);
+            if($this->model->get_status() == 'awaitingreply'){
+                $this->model->set_status('opened');
+                $this->model->update();
+            }
         }
 
         wp_redirect( $this->$redirect_url_callback() );
@@ -252,7 +264,8 @@ class ticket{
     }
 
     public function get_backend_ticket_url(){
-        return menu_page_url( 'calisia-tickets', false ).'&id='.$this->model->get_id();
+        //return menu_page_url( 'calisia-tickets', false ).'&id='.$this->model->get_id();
+        return admin_url( 'admin.php?page=calisia-tickets' ) . '&id='.$this->model->get_id();
     }
 
     public function get_backend_new_ticket_url(){
