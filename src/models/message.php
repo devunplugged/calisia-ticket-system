@@ -9,6 +9,8 @@ class message extends model{
     protected $added;
     protected $text;
     protected $added_by;
+    protected $seen = 0;
+    protected $customer_seen = 0;
 
     public function set_id($id){
         $this->id = $id;
@@ -39,5 +41,17 @@ class message extends model{
     }
     public function get_added_by(){
         return $this->added_by;
+    }
+    public function set_seen($seen){
+        $this->seen = $seen;
+    }
+    public function get_seen(){
+        return $this->seen;
+    }
+    public function set_customer_seen($customer_seen){
+        $this->customer_seen = $customer_seen;
+    }
+    public function get_customer_seen(){
+        return $this->customer_seen;
     }
 }

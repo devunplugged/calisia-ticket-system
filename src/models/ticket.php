@@ -8,6 +8,8 @@ class ticket extends model{
     protected $title;
     protected $kind;
     protected $added;
+    protected $last_support_reply = '0000-00-00 00:00:00';
+    protected $last_customer_reply = '0000-00-00 00:00:00';
     protected $user_id;
     protected $added_by;
     protected $element_id;
@@ -45,6 +47,22 @@ class ticket extends model{
 
     public function set_added($added){
         $this->added = $added;
+    }
+
+    public function get_last_support_reply(){
+        return $this->last_support_reply;
+    }
+
+    public function set_last_support_reply($last_support_reply){
+        $this->last_support_reply = $last_support_reply;
+    }
+
+    public function get_last_customer_reply(){
+        return $this->last_customer_reply;
+    }
+
+    public function set_last_customer_reply($last_customer_reply){
+        $this->last_customer_reply = $last_customer_reply;
     }
 
     public function get_user_id(){

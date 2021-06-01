@@ -80,15 +80,16 @@ class ticket{
     public function mark_ticket_seen(){
         $this->model->set_seen(1);
         $this->model->update();
-        /*global $wpdb;
-
-        return $wpdb->update( $wpdb->prefix."calisia_ticket_system_ticket", array( 'seen' => 1 ), array( 'id' => $this->model->get_id() ), array( '%d' ), array( '%d' ));*/
     }
 
     public function mark_messages_seen(){
         global $wpdb;
-
         return $wpdb->update( $wpdb->prefix."calisia_ticket_system_message", array( 'seen' => 1 ), array( 'ticket_id' => $this->model->get_id() ), array( '%d' ), array( '%d' ));
+    }
+
+    public function mark_messages_customer_seen(){
+        global $wpdb;
+        return $wpdb->update( $wpdb->prefix."calisia_ticket_system_message", array( 'customer_seen' => 1 ), array( 'ticket_id' => $this->model->get_id() ), array( '%d' ), array( '%d' ));
     }
 
 
@@ -97,7 +98,7 @@ class ticket{
         $this->model->update();
     }
 
-    public function save_ticket($redirect_url_callback = 'get_frontend_ticket_url'){
+    private function validate_before_ticket_save($redirect_url_callback){
         if(!is_user_logged_in()){
             events::add_event(__('You have to be logged in','calisia-ticket-system'), 'danger');
             if($redirect_url_callback == 'get_frontend_ticket_url'){
@@ -117,8 +118,6 @@ class ticket{
             }
         }
             
-        
-
         if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-new', $_POST['calisia_form_token'], '')){
             if($redirect_url_callback == 'get_frontend_ticket_url'){
                 $this->redirect_to_new_ticket_form();
@@ -127,7 +126,11 @@ class ticket{
             }
             exit;
         }
+    }
 
+    public function save_ticket($redirect_url_callback = 'get_frontend_ticket_url'){
+        
+        $this->validate_before_ticket_save($redirect_url_callback);
         try{
             $uploaded_files = uploader::save_uploaded_files();
         }catch(\Exception $e) {
@@ -139,25 +142,38 @@ class ticket{
             }
             exit;
         }
-        $ticket = data::save_post_to_ticket();
-        $message = data::save_post_to_message($ticket->model->get_id());
+
+        $this->model->fill(data::save_post_to_ticket()->get_model());
+        $message = data::save_post_to_message($this->model->get_id());
         data::save_uploads($message->get_model()->get_id(), $uploaded_files);
-        $this->model->set_id($ticket->model->get_id());
+        $this->model->set_id($this->model->get_id());
 
         require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-message.php';
         $email = new email_message();
         //send email when someone else than user resopnds, otherwise send notification to support
-        if($ticket->model->get_user_id() != get_current_user_id()){
+        if($this->model->get_user_id() != get_current_user_id()){
             $email->send_notification_to_client($message);
+            $this->save_support_last_message_date();
         }else{
             $email->send_notification_to_support($message);
+            $this->save_customer_last_message_date();
         }
 
-        wp_redirect( $ticket->$redirect_url_callback() );
+        wp_redirect( $this->$redirect_url_callback() );
         exit;
     }
 
-    public function save_reply($redirect_url_callback = 'get_frontend_ticket_url'){
+    public function validate_before_reply_save($redirect_url_callback){
+        if(!is_user_logged_in()){
+            events::add_event(__('You have to be logged in','calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                wp_redirect( $this->get_frontend_ticket_url() );
+            }else{
+                wp_redirect( $this->get_backend_ticket_url() );
+            }
+            exit;
+        }
+
         if(!$this->user_validation()){
             wp_redirect( $this->$redirect_url_callback() );
             exit;
@@ -167,7 +183,11 @@ class ticket{
             wp_redirect( $this->$redirect_url_callback() );
             exit;
         }
+    }
 
+    public function save_reply($redirect_url_callback = 'get_frontend_ticket_url'){
+        
+        $this->validate_before_reply_save($redirect_url_callback);
         try{
             $uploaded_files = uploader::save_uploaded_files();
         }catch(\Exception $e) {
@@ -185,6 +205,7 @@ class ticket{
         if($this->get_model()->get_user_id() != get_current_user_id()){ 
             //support responded
             $email->send_notification_to_client($message);
+            $this->save_support_last_message_date($this);
         }else{
             //client responded
             $email->send_notification_to_support($message);
@@ -192,10 +213,21 @@ class ticket{
                 $this->model->set_status('opened');
                 $this->model->update();
             }
+            $this->save_customer_last_message_date($this);
         }
 
         wp_redirect( $this->$redirect_url_callback() );
         exit;
+    }
+
+    public function save_support_last_message_date(){
+        $this->model->set_last_support_reply(current_time('mysql'));
+        $this->model->update();
+    }
+
+    public function save_customer_last_message_date(){
+        $this->model->set_last_customer_reply(current_time('mysql'));
+        $this->model->update();
     }
 
     public function close($redirect_url_callback = 'get_frontend_ticket_url'){

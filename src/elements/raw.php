@@ -4,12 +4,14 @@ namespace calisia_ticket_system\elements;
 use \calisia_ticket_system as cts;
 
 class raw{
-    public static function ticket_message($message){
+    public static function ticket_message($message, $ticket){
         return cts\renderer::render(
             'tickets/messages/ticket-message',
             array(
                 'message' => $message,
-                'attachments' => $message->get_attachments()
+                'attachments' => $message->get_attachments(),
+                'backend' => 1,
+                'owner_id' => $ticket->get_model()->get_user_id()
             ),
             false
         );

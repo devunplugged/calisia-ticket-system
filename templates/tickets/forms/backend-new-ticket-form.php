@@ -1,6 +1,6 @@
 <form method="POST" enctype="multipart/form-data">
     <label for="title"><?php _e('Ticket title:','calisia-ticket-system');?></label>
-    <div class="ticket-form-row"><input type="text" name="title" id="title" class="w-100"></div>
+    <div class="ticket-form-row"><input type="text" name="title" id="title" class="w-100" required></div>
     <label for="status-select"><?php _e('Ticket status:','calisia-ticket-system');?></label>
     <div class="ticket-form-row"><?php echo $args['status-select']; ?></div>
     <label for="ticket-user-search"><?php _e('Search for user:','calisia-ticket-system');?></label>

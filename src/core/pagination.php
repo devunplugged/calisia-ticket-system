@@ -53,7 +53,7 @@ class pagination{
 
         if($params)
             return '?show-page=' . $page . '&' . $params;
-        return '';
+        return '?show-page=' . $page;
     }
 
     public function render(){

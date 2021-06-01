@@ -67,4 +67,5 @@ class model{
         $class_parts = explode('\\', get_class($this));
         return end($class_parts);
     }
+
 }

@@ -207,6 +207,8 @@ class data{
         return $message;
     }
 
+    
+
     public static function save_uploads($message_id, $uploaded_files){
         foreach($uploaded_files as $uploaded_file){
             $file = new file();

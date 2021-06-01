@@ -11,7 +11,7 @@ class backend{
         add_menu_page(
             __( 'Calisia Tickets', 'calisia-ticket-system' ),
             __( 'Tickets', 'calisia-ticket-system' ),
-            'manage_options',
+            'manage_woocommerce',
             'calisia-tickets',
             'calisia_ticket_system\backend::my_admin_page_contents',
             'dashicons-tickets-alt',
@@ -58,7 +58,7 @@ class backend{
 
         $messages = '';
         foreach($ticket->get_conversation() as $message){
-            $messages .= elements\raw::ticket_message($message);
+            $messages .= elements\raw::ticket_message($message, $ticket);
         }
 
         $params = array();

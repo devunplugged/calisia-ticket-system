@@ -91,6 +91,7 @@ class frontend{
             return;
         }
 
+        $ticket->mark_messages_customer_seen();
         $messages = '';
         foreach($ticket->get_conversation() as $message){
 
@@ -98,7 +99,9 @@ class frontend{
                 'tickets/messages/ticket-message',
                 array(
                     'message' => $message,
-                    'attachments' => $message->get_attachments()
+                    'attachments' => $message->get_attachments(),
+                    'backend' => 0,
+                    'owner_id' => $ticket->get_model()->get_user_id()
                 ),
                 false
             );

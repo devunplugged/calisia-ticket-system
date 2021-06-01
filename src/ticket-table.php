@@ -59,9 +59,13 @@ class Ticket_List extends WP_List_Table {
 		$params = $where_clause['params'];
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			$sql .= ' ORDER BY %s %s';
-			$params[] = esc_sql( $_REQUEST['orderby'] );
-			$params[] = ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
+			if(in_array($_REQUEST['orderby'],array('title','added','last_support_reply','last_customer_reply'))){
+				$sql .= ' ORDER BY ';
+				$sql .= esc_sql( $_REQUEST['orderby'] );
+				$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
+			}else{
+				$sql .= ' ORDER BY added DESC';
+			}
 		}else{
 			//default order by
 			$sql .= ' ORDER BY added DESC';
@@ -159,6 +163,8 @@ class Ticket_List extends WP_List_Table {
 			case 'status':
 			case 'kind':
 			case 'added':
+			case 'last_support_reply':
+			case 'last_customer_reply':
 				return $item[ $column_name ];
 			default:
                 return print_r( $item, true ); //Show the whole array for troubleshooting purposes
@@ -212,7 +218,9 @@ class Ticket_List extends WP_List_Table {
 			'seen' => __( 'Seen', 'calisia-ticket-system' ),
 			'status' => __( 'Status', 'calisia-ticket-system' ),
 			'kind' => __( 'Kind', 'calisia-ticket-system' ),
-			'added'    => __( 'Added', 'calisia-ticket-system' )
+			'added'    => __( 'Added', 'calisia-ticket-system' ),
+			'last_support_reply'    => __( 'Last Support Reply', 'calisia-ticket-system' ),
+			'last_customer_reply'    => __( 'Last Customer Reply', 'calisia-ticket-system' )
 		];
 
 		return $columns;
@@ -227,7 +235,9 @@ class Ticket_List extends WP_List_Table {
 	public function get_sortable_columns() {
 		$sortable_columns = array(
 			'title' => array( 'title', true ),
-			'added' => array( 'added', false )
+			'added' => array( 'added', false ),
+			'last_support_reply' => array( 'last_support_reply', false ),
+			'last_customer_reply' => array( 'last_customer_reply', false )
 		);
 
 		return $sortable_columns;
