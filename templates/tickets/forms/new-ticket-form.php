@@ -1,6 +1,6 @@
 <form method="POST" enctype="multipart/form-data">
     <label for="ticket-title"><?php _e('Ticket title', 'calisia-ticket-system'); ?></label>
-    <div><input id="ticket-title" type="text" name="title"></div>
+    <div><input id="ticket-title" type="text" name="title" required></div>
     
 
     <?php if(isset($args['kind']) && $args['kind'] == 'order'){ ?>
@@ -19,7 +19,7 @@
     <?php } ?>
     <label for="ticket-msg"><?php _e('Message', 'calisia-ticket-system'); ?></label>
     <div>
-        <textarea id="ticket-msg" name="msg"></textarea>
+        <textarea id="ticket-msg" name="msg" required></textarea>
     </div>
 
     <input type="hidden" name="calisia_ticket_new" value="1">

@@ -10,7 +10,7 @@ class backend{
     public static function my_admin_menu() {
         add_menu_page(
             __( 'Calisia Tickets', 'calisia-ticket-system' ),
-            __( 'Tickets', 'calisia-ticket-system' ),
+            __( 'Tickets', 'calisia-ticket-system' ) . ' ('.data::get_number_of_all_unread_messages().')',
             'manage_woocommerce',
             'calisia-tickets',
             'calisia_ticket_system\backend::my_admin_page_contents',
@@ -97,5 +97,13 @@ class backend{
             );
             echo elements\panels::user_tickets_table();
         }
+    }
+
+    public static function add_order_meta_boxes($post) {
+        add_meta_box( 'calisia-order-tickets-metabox', __('Order tickets','calisia-ticket-system'), 'calisia_ticket_system\backend::order_tickets_metabox_content', 'shop_order', 'normal', 'core' );
+    }
+
+    public static function order_tickets_metabox_content($post) {
+        echo elements\panels::order_tickets_table($post->ID, true);
     }
 }

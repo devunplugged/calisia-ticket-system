@@ -37,6 +37,9 @@
 .calisia-ticket-row-date{
     width: 100%;
     font-size: .8em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 .calisia-ticket-row-status{
     width: 20%;
@@ -51,3 +54,6 @@
     flex-wrap: wrap;
 }
 
+.text-small{
+    font-size: .8rem;
+}

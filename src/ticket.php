@@ -117,6 +117,26 @@ class ticket{
                 exit;
             }
         }
+
+        if(!isset($_POST['title']) || empty($_POST['title'])){
+            events::add_event(__('Ticket title cannot be empty.','calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                $this->redirect_to_new_ticket_form();
+            }else{
+                wp_redirect( $this->get_backend_new_ticket_url() );
+            }
+            exit;
+        }
+
+        if(!isset($_POST['msg']) || empty($_POST['msg'])){
+            events::add_event(__('Message cannot be empty.','calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                $this->redirect_to_new_ticket_form();
+            }else{
+                wp_redirect( $this->get_backend_new_ticket_url() );
+            }
+            exit;
+        }
             
         if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-new', $_POST['calisia_form_token'], '')){
             if($redirect_url_callback == 'get_frontend_ticket_url'){
@@ -176,6 +196,26 @@ class ticket{
 
         if(!$this->user_validation()){
             wp_redirect( $this->$redirect_url_callback() );
+            exit;
+        }
+
+        if($this->model->get_deleted == 1){
+            events::add_event(__('You cannot reply to deleted tickets.','calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                wp_redirect( $this->get_frontend_ticket_url() );
+            }else{
+                wp_redirect( $this->get_backend_ticket_url() );
+            }
+            exit;
+        }
+
+        if(!isset($_POST['msg']) || empty($_POST['msg'])){
+            events::add_event(__('Message cannot be empty.','calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                wp_redirect( $this->get_frontend_ticket_url() );
+            }else{
+                wp_redirect( $this->get_backend_ticket_url() );
+            }
             exit;
         }
 

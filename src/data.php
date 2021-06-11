@@ -69,7 +69,7 @@ class data{
 
         $results = $wpdb->get_results(
             $wpdb->prepare(
-            "SELECT * FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE kind = %s AND user_id = %d AND element_id = %d ORDER BY id DESC",
+            "SELECT *, GREATEST( last_support_reply, last_customer_reply ) AS last_reply FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE kind = %s AND user_id = %d AND element_id = %d ORDER BY last_reply DESC, id DESC",
             array(
                 $kind,
                 $user_id,
@@ -86,7 +86,7 @@ class data{
 
         $results = $wpdb->get_results(
             $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS  * FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE user_id = %d ORDER BY id DESC LIMIT %d, %d",
+            "SELECT SQL_CALC_FOUND_ROWS  *, GREATEST( last_support_reply, last_customer_reply ) AS last_reply FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE user_id = %d AND deleted = 0 ORDER BY last_reply DESC, id DESC LIMIT %d, %d",
             array(
                 $user_id,
                 $pagination->get_offset(), 
@@ -165,7 +165,20 @@ class data{
         );
     }
 */
-    
+    public static function get_number_of_unread_messages_customer($ticket_id){
+        global $wpdb;
+
+        $result = $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT count(id) as unread FROM ".$wpdb->prefix."calisia_ticket_system_message WHERE ticket_id = %d AND customer_seen = 0",
+            array(
+                $ticket_id
+            )
+            )
+        );
+        
+        return $result[0]->unread;
+    }
 
     public static function get_number_of_unread_messages($ticket_id){
         global $wpdb;
@@ -180,6 +193,26 @@ class data{
         );
         
         return $result[0]->unread;
+    }
+
+    public static function get_number_of_all_unread_messages(){
+        $unread = 0;
+        global $wpdb;
+
+        $tickets = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE deleted = 0");
+        foreach($tickets as $ticket){
+            $result = $wpdb->get_results(
+                $wpdb->prepare(
+                "SELECT count(id) as unread FROM ".$wpdb->prefix."calisia_ticket_system_message WHERE ticket_id = %d AND seen = 0",
+                array(
+                    $ticket->id
+                   )
+                )
+            );
+            $unread += $result[0]->unread;
+        }
+
+        return $unread;
     }
 
     public static function save_post_to_ticket(){

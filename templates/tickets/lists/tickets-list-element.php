@@ -1,15 +1,48 @@
 <div class="calisia-tickets-row">
     <div class="p-10 calisia-tickets-row-content">
         <div class="calisia-ticket-row-date">
-            <?php echo $args['ticket']->get_model()->get_added(); ?>
+            <div>
+                <?php _e('Created:','calisia-ticket-system'); ?>
+                <?php echo $args['ticket']->get_model()->get_added(); ?>
+            </div>
+            <div>
+                <?php _e('Last activity:','calisia-ticket-system'); ?>
+                <?php 
+                    echo $args['ticket']->get_model()->get_last_support_reply() > $args['ticket']->get_model()->get_last_customer_reply() ? $args['ticket']->get_model()->get_last_support_reply(): $args['ticket']->get_model()->get_last_customer_reply();
+                ?>
+            </div>
         </div>
         
         <div class="calisia-ticket-row-title">
-            <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>calisia-show-ticket/?id=<?php echo $args['ticket']->get_model()->get_id(); ?>"><?php echo $args['ticket']->get_model()->get_title(); ?></a>
+            <?php if($args['unread'] != 0){ ?>
+                <strong>
+            <?php } ?>
+            <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>calisia-show-ticket/?id=<?php echo $args['ticket']->get_model()->get_id(); ?>"><?php echo $args['ticket']->get_model()->get_title(); ?>
+            <?php 
+                if($args['unread'] != 0){
+                    echo ' ('. $args['unread'] .')';
+                } 
+            ?>
+            </a>
+            <?php if($args['unread'] != 0){ ?>
+                </strong>
+            <?php } ?>
+            <div class="text-small">
+                <?php echo calisia_ticket_system\translations::ticket_kind($args['ticket']->get_model()->get_kind()); ?>
+                <?php 
+                    if($args['ticket']->get_model()->get_kind() != 'other'){
+                        if(isset($args['order']))
+                            echo '<a href="'.$args['order']->get_view_order_url().'">';
+                        echo '#' . $args['ticket']->get_model()->get_element_id();
+                        if(isset($args['order']))
+                            echo '</a>';
+                    } 
+                ?>
+            </div>
         </div>
         
         <div class="calisia-ticket-row-status">
-            <?php echo $args['ticket']->get_model()->get_status(); ?>
+            <?php echo calisia_ticket_system\translations::ticket_status($args['ticket']->get_model()->get_status()); ?>
         </div>
     </div>
 </div>

@@ -18,7 +18,7 @@ class Ticket_List extends WP_List_Table {
 
 
 	private static function where_clause(){
-		$gets = array('kind', 'status', 'user_id');
+		$gets = array('kind', 'status', 'user_id', 'order_id');
 		$where = ' WHERE deleted=0 AND';
 		$params = array();
 
@@ -159,7 +159,9 @@ class Ticket_List extends WP_List_Table {
 					$link_name = '<strong>' . $link_name . ' ('.$number_of_unread.')</strong>';
                 return "<a href='$link_url'>$link_name</a>";
                 break;
-			case 'seen':
+			case 'user_id':
+				return  get_user_by( 'ID', $item[ $column_name ] )->user_email;
+				break;
 			case 'status':
 			case 'kind':
 			case 'added':
@@ -215,7 +217,7 @@ class Ticket_List extends WP_List_Table {
 		$columns = [
 			'cb'      => '<input type="checkbox" />',
 			'title'    => __( 'Title', 'calisia-ticket-system' ),
-			'seen' => __( 'Seen', 'calisia-ticket-system' ),
+			'user_id' => __( 'E-mail', 'calisia-ticket-system' ),
 			'status' => __( 'Status', 'calisia-ticket-system' ),
 			'kind' => __( 'Kind', 'calisia-ticket-system' ),
 			'added'    => __( 'Added', 'calisia-ticket-system' ),
@@ -326,4 +328,6 @@ class Ticket_List extends WP_List_Table {
 			exit;
 		}
 	}
+
+	//function display_tablenav($which){}
 }

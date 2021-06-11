@@ -17,7 +17,7 @@ class raw{
         );
     }
 
-    public static function browse_tickets($render = true){
+    public static function browse_tickets($render = true, $controls = true, $wrap_in_form = true){
         ob_start();
             $tickets_list = new cts\Ticket_List();
             $tickets_list->prepare_items();
@@ -29,16 +29,20 @@ class raw{
             ob_start();
         }
 
-        echo controls::ticket_table_controls();
+        if($controls)
+            echo controls::ticket_table_controls();
 
-        
-        cts\renderer::render(
-            'tickets/forms/default',
-            array(
-                'method' => 'POST',
-                'content' => $tickets_table
-            )
-        );
+        if($wrap_in_form){
+            cts\renderer::render(
+                'tickets/forms/default',
+                array(
+                    'method' => 'POST',
+                    'content' => $tickets_table
+                )
+            );
+        }else{
+            echo $tickets_table;
+        }
 
         if(!$render){
             $output = ob_get_contents();

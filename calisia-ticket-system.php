@@ -79,3 +79,6 @@ add_action( "wp_ajax_calisia_ticket_system_search", 'calisia_ticket_system\ajax:
 
 //load plugin textdomain
 add_action( 'init', 'calisia_ticket_system\translations::load_textdomain' );
+
+//add metabox to order edit page; display order tickets table
+add_action( 'add_meta_boxes_shop_order', 'calisia_ticket_system\backend::add_order_meta_boxes' );

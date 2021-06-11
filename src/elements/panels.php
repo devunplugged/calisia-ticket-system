@@ -17,6 +17,25 @@ class panels{
         );
     }
 
+    public static function order_tickets_table($order_id = 0, $raw = false){
+        if($order_id != 0)
+            $_GET['element_id'] = $order_id;
+
+        $_GET['kind'] = 'order';
+        
+        if(!$raw){
+            return cts\renderer::render(
+                'elements/backend-user-tickets-table',
+                array(
+                    'tickets_table' => raw::browse_tickets(false, false)
+                ),
+                false
+            );
+        }else{
+            return raw::browse_tickets(false, false, false);
+        }
+    }
+
     public static function user_info($user_id){
         return cts\renderer::render(
             'elements/backend-user',

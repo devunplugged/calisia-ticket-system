@@ -8,31 +8,7 @@ class frontend{
         add_rewrite_endpoint( 'calisia-show-ticket', EP_PAGES );
     }
 
-    public static function order_tickets( $order ){
-
-        $tickets = data::get_tickets('order', get_current_user_id(), $order->get_id());
-
-        $ticket_list = '';
-        foreach($tickets as $ticket){
-            $ticket_list .= renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket), false);
-        }
-
-        renderer::render(
-            'tickets/lists/ticket-list-container',
-            array(
-                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array(), false),
-                'ticket_list' => $ticket_list
-            )
-        );
-
-        renderer::render(
-            'tickets/buttons/new-order-ticket-button',
-            array(
-                'element_id' => $order->get_id()
-            )
-        );
-        
-    }
+    
 
 
     public static function new_ticket() {
@@ -91,6 +67,16 @@ class frontend{
             return;
         }
 
+        if($ticket->get_model()->get_deleted() == 1){
+            renderer::render(
+                'alerts/alert-danger',
+                array(
+                    'msg' => __('This ticket has been deleted', 'calisia-ticket-system')
+                )
+            );
+            return;
+        }
+
         $ticket->mark_messages_customer_seen();
         $messages = '';
         foreach($ticket->get_conversation() as $message){
@@ -107,12 +93,13 @@ class frontend{
             );
         }
 
-        renderer::render(
-            'tickets/bars/single-ticket-frontend-bar',
-            array(
-                'ticket' => $ticket
-            )
-        );
+        $params = array();
+        if($ticket->get_model()->get_kind() == 'order'){
+            $order = wc_get_order($ticket->get_model()->get_element_id());
+            $params['order'] = $order;
+        }
+        $params['ticket'] = $ticket;
+        renderer::render('tickets/bars/single-ticket-frontend-bar', $params);
 
         renderer::render(
             'tickets/messages/ticket-messages',
@@ -161,7 +148,14 @@ class frontend{
 
         $ticket_list = '';
         foreach($tickets['tickets'] as $ticket){
-            $ticket_list .= renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket), false);
+            if($ticket->get_model()->get_kind() == 'order'){
+                $order = wc_get_order($ticket->get_model()->get_element_id());
+                $ticket_list .= renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket, 'order' => $order, 'unread' => data::get_number_of_unread_messages_customer($ticket->get_model()->get_id())), false);
+            }else{
+                $ticket_list .= renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket, 'unread' => data::get_number_of_unread_messages_customer($ticket->get_model()->get_id())), false);
+            }
+
+            
         }
 
         renderer::render(
@@ -177,6 +171,32 @@ class frontend{
         );
 
         $pagination->render();
+        
+    }
+
+    public static function order_tickets( $order ){
+
+        $tickets = data::get_tickets('order', get_current_user_id(), $order->get_id());
+
+        $ticket_list = '';
+        foreach($tickets as $ticket){
+            $ticket_list .= renderer::render('tickets/lists/tickets-list-element',array('ticket' => $ticket, 'order' => $order, 'unread' => data::get_number_of_unread_messages_customer($ticket->get_model()->get_id())), false);
+        }
+
+        renderer::render(
+            'tickets/lists/ticket-list-container',
+            array(
+                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array(), false),
+                'ticket_list' => $ticket_list
+            )
+        );
+
+        renderer::render(
+            'tickets/buttons/new-order-ticket-button',
+            array(
+                'element_id' => $order->get_id()
+            )
+        );
         
     }
 }
