@@ -99,6 +99,21 @@ class data{
         return array('tickets' => $tickets, 'row_count' => $found_rows_number[0]->found_rows);
     }
 
+    public static function get_order_tickets($order_id){
+        global $wpdb;
+
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT *, GREATEST( last_support_reply, last_customer_reply ) AS last_reply FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE kind = 'order' AND element_id = %d ORDER BY last_reply DESC, id DESC",
+            array(
+                $order_id
+               )
+            )
+        );
+
+        return default_object::get_models($results, 'calisia_ticket_system\ticket');
+    }
+
     
 /*
     public static function get_message_attachments($message_id){

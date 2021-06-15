@@ -165,7 +165,7 @@ class frontend{
         renderer::render(
             'tickets/lists/ticket-list-container',
             array(
-                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array(), false),
+                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array('title' => __('Your tickets', 'calisia-ticket-system')), false),
                 'ticket_list' => $ticket_list
             )
         );
@@ -186,7 +186,7 @@ class frontend{
         renderer::render(
             'tickets/lists/ticket-list-container',
             array(
-                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array(), false),
+                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array('title' => __('Your tickets', 'calisia-ticket-system')), false),
                 'ticket_list' => $ticket_list
             )
         );

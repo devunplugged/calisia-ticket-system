@@ -8,7 +8,7 @@
                 <?php printf(__( 'Payment via: %1$s (%2$s)', 'calisia-ticket-system' ), $args['order']->get_data()['payment_method_title'],$args['order']->get_data()['transaction_id'] ); ?>
 
                 <?php
-                    if($args['order']->is_paid()){
+                    if($args['order']->is_paid() && isset($args['order']->get_data()['date_paid'])){
                         printf(__( 'Paid: %1$s', 'calisia-ticket-system' ), date('Y-m-d H:i', $args['order']->get_data()['date_paid']->getTimestamp() ) );
                     }
                 ?>

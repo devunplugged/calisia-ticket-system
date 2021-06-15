@@ -48,6 +48,23 @@ class backend{
     }
 
     public static function single_ticket(){
+      /*  $mail_header_template_path = options::get_option_value('email_header_path') ? options::get_option_value('email_header_path') : '/wp-content/plugins/woocommerce/templates/emails/email-header.php';
+        $mail_footer_template_path = options::get_option_value('email_footer_path') ? options::get_option_value('email_footer_path') : '/wp-content/plugins/woocommerce/templates/emails/email-footer.php';
+        $email_heading = 'booom';
+
+        ob_start();
+        include ABSPATH . $mail_header_template_path;
+        $message_header = ob_get_contents();
+        ob_end_clean();
+
+        ob_start();
+        include ABSPATH . $mail_footer_template_path;
+        $message_footer .= ob_get_contents();
+        ob_end_clean();
+        echo $message_header;
+        echo "tresc";
+        echo $message_footer;*/
+
         events::show_events();
 
         $ticket = new ticket((int)$_GET['id']);
@@ -104,6 +121,36 @@ class backend{
     }
 
     public static function order_tickets_metabox_content($post) {
-        echo elements\panels::order_tickets_table($post->ID, true);
+        $tickets = data::get_order_tickets($post->ID);
+        $order = wc_get_order($post->ID);
+
+        $ticket_list = '';
+        foreach($tickets as $ticket){
+            $ticket_list .= renderer::render('tickets/lists/backend-tickets-list-element',array('ticket' => $ticket, 'order' => $order, 'unread' => data::get_number_of_unread_messages($ticket->get_model()->get_id())), false);
+        }
+
+        renderer::render(
+            'tickets/containers/backend-new-ticket-button-container',
+            array(
+                'button' => renderer::render(
+                    'tickets/buttons/backend-new-ticket-button',
+                    array(
+                        'user_id' => $order->get_user_id(),
+                        'kind' => 'order',
+                        'element_id' => $post->ID
+                    ),
+                    false
+                )
+            )
+        );
+        
+
+        renderer::render(
+            'tickets/lists/ticket-list-container',
+            array(
+                'title_bar' => renderer::render('tickets/bars/ticket-list-title-bar', array('title' => __('Order tickets', 'calisia-ticket-system')), false),
+                'ticket_list' => $ticket_list
+            )
+        );
     }
 }

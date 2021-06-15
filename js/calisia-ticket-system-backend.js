@@ -1,40 +1,50 @@
 jQuery(document).ready(function() {
-    const user_search_input = document.getElementById('ticket-user-search');
-    const element_search_input = document.getElementById('ticket-element-search');
-    const kind_select_input = document.getElementById('kind-select');
+    const calisia_user_search_input = document.getElementById('ticket-user-search');
+    const calisia_element_search_input = document.getElementById('ticket-element-search');
+    const calisia_kind_select_input = document.getElementById('kind-select');
 
     let calisiaSearch = new CalisiaSearch();
     let calisiaUI = new CalisiaUI();
 
-    user_search_input.addEventListener(
-        'input', 
-        event=>{
-            document.querySelector('#user-suggestion').style.display = 'block';
-            document.querySelector('#user-suggestion').innerText = 'loading results...';
-            calisiaSearch.searchElement(event.target.value, 'user');
-        }, 
-        false
-    );
-    element_search_input.addEventListener(
-        'input', 
-        event=>{
-            document.querySelector('#element-suggestion').innerText = 'loading results...';
-            calisiaSearch.searchElement(event.target.value, document.querySelector('#kind-select').value);
-        },
-        false
-    );
-    kind_select_input.addEventListener(
-        'input', 
-        ()=>{
-            document.querySelector('#element-suggestion').innerText = 'loading results...';
-            calisiaUI.kindChanged(document.querySelector('#ticket-element-search').value, document.querySelector('#kind-select').value, calisiaSearch);
-        },
-        false
-    );
+    if(calisia_user_search_input){
+        calisia_user_search_input.addEventListener(
+            'input', 
+            event=>{
+                document.querySelector('#user-suggestion').style.display = 'block';
+                document.querySelector('#user-suggestion').innerText = 'loading results...';
+                calisiaSearch.searchElement(event.target.value, 'user');
+            }, 
+            false
+        );
+    }
+    if(calisia_element_search_input){
+        calisia_element_search_input.addEventListener(
+            'input', 
+            event=>{
+                document.querySelector('#element-suggestion').innerText = 'loading results...';
+                calisiaSearch.searchElement(event.target.value, document.querySelector('#kind-select').value);
+            },
+            false
+        );
+    }
+    if(calisia_kind_select_input){
+        calisia_kind_select_input.addEventListener(
+            'input', 
+            ()=>{
+                document.querySelector('#element-suggestion').innerText = 'loading results...';
+                calisiaUI.kindChanged(document.querySelector('#ticket-element-search').value, document.querySelector('#kind-select').value, calisiaSearch);
+            },
+            false
+        );
+    }
     
-    
-    document.querySelector('#select-other-user-button').addEventListener('click', calisiaUI.showUserSearch, false);
-    document.querySelector('#select-other-element-button').addEventListener('click', calisiaUI.showElementSearch, false);
+    let calisia_select_other_user_button = document.querySelector('#select-other-user-button');
+    if(calisia_select_other_user_button)
+        calisia_select_other_user_button.addEventListener('click', calisiaUI.showUserSearch, false);
+
+    let calisia_select_other_element_button = document.querySelector('#select-other-element-button');
+    if(calisia_select_other_element_button)
+        calisia_select_other_element_button.addEventListener('click', calisiaUI.showElementSearch, false);
 });
 
 class CalisiaSearch{
@@ -57,7 +67,7 @@ class CalisiaSearch{
         let ajax = new CalisiaAjax();
         ajax.call(
             { 
-                action: 'calisia_ticket_system_search', // this is the function in your functions.php that will be triggered
+                action: 'calisia_ticket_system_search', 
                 phrase: phrase,
                 kind: kind,
                 user_id: document.querySelector('#ticket-user-id').value

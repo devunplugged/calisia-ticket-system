@@ -52,38 +52,51 @@ class raw{
     }
 
     public static function new_ticket(){
+        $template = 'tickets/forms/backend-new-ticket-form';
+        if(isset($_GET['kind']))
+            $template = 'tickets/forms/backend-new-ticket-form-predefind';
+
+        $arguments = array(
+            'status-select' => cts\inputs::select(
+                                            array(
+                                                'id' => 'status-select',
+                                                'name' => 'status',
+                                                'class' => 'select',
+                                                'options' => array(
+                                                    __('Opened', 'calisia-ticket-system') => 'opened',
+                                                    __('On-hold', 'calisia-ticket-system') => 'onhold',
+                                                    __('Awaiting Reply', 'calisia-ticket-system') => 'awaitingreply',
+                                                    __('Completed', 'calisia-ticket-system') => 'competed'
+                                                ),
+                                                'value' => ''
+                                            )
+                                        ),
+            'kind-select' => cts\inputs::select(
+                                            array(
+                                                'id' => 'kind-select',
+                                                'name' => 'kind',
+                                                'class' => 'select',
+                                                'options' => array(
+                                                    __('Other', 'calisia-ticket-system') => 'other',
+                                                    __('Order', 'calisia-ticket-system') => 'order'
+                                                ),
+                                                'value' => isset($_GET['kind']) ? $_GET['kind'] : ''
+                                            )
+                                        ),
+            'nonce' => wp_create_nonce( 'calisia-ticket-new' ),
+            'token' => cts\Form_Token::create_token()
+        );
+
+        if(isset($_GET['user_id'])){
+            $user = get_user_by( 'ID', $_GET['user_id'] );
+            $arguments['user'] = $user->user_email . ' ' . $user->first_name . ' ' . $user->last_name;
+            $arguments['kind'] = $_GET['kind'];
+            $arguments['kind_name'] = cts\translations::ticket_kind($_GET['kind']);
+        }
+
         return cts\renderer::render(
-            'tickets/forms/backend-new-ticket-form',
-            array(
-                'status-select' => cts\inputs::select(
-                                                array(
-                                                    'id' => 'status-select',
-                                                    'name' => 'status',
-                                                    'class' => 'select',
-                                                    'options' => array(
-                                                        __('Opened', 'calisia-ticket-system') => 'opened',
-                                                        __('On-hold', 'calisia-ticket-system') => 'onhold',
-                                                        __('Awaiting Reply', 'calisia-ticket-system') => 'awaitingreply',
-                                                        __('Completed', 'calisia-ticket-system') => 'competed'
-                                                    ),
-                                                    'value' => ''
-                                                )
-                                            ),
-                'kind-select' => cts\inputs::select(
-                                                array(
-                                                    'id' => 'kind-select',
-                                                    'name' => 'kind',
-                                                    'class' => 'select',
-                                                    'options' => array(
-                                                        __('Other', 'calisia-ticket-system') => 'other',
-                                                        __('Order', 'calisia-ticket-system') => 'order'
-                                                    ),
-                                                    'value' => ''
-                                                )
-                                            ),
-                'nonce' => wp_create_nonce( 'calisia-ticket-new' ),
-                'token' => cts\Form_Token::create_token()
-            ),
+            $template,
+            $arguments,
             false
         );
     }

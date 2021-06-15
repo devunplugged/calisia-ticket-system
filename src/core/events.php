@@ -7,9 +7,13 @@ class events{
 
     public static function add_event($msg, $type){
         //$_SESSION['calisia-events'][] = array('msg' => $msg, 'type' => $type);
+        $events = get_user_meta(get_current_user_id(), 'calisia-events', true );
+      
         $current_events = array();
-        foreach(get_user_meta(get_current_user_id(), 'calisia-events', true ) as $event){
-            $current_events[] = $event;
+        if(is_array($events)){
+            foreach($events as $event){
+                $current_events[] = $event;
+            }
         }
         $current_events[] = array('msg' => $msg, 'type' => $type);
         update_user_meta(get_current_user_id(), 'calisia-events', $current_events);

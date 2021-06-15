@@ -99,6 +99,7 @@ class ticket{
     }
 
     private function validate_before_ticket_save($redirect_url_callback){
+  
         if(!is_user_logged_in()){
             events::add_event(__('You have to be logged in','calisia-ticket-system'), 'danger');
             if($redirect_url_callback == 'get_frontend_ticket_url'){
@@ -117,6 +118,37 @@ class ticket{
                 exit;
             }
         }
+
+        $kind_object = kinds::get($_POST['kind']);
+        if(!$kind_object){
+            events::add_event(__("Ticket kind doesn't exist.",'calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                $this->redirect_to_new_ticket_form();
+            }else{
+                wp_redirect( $this->get_backend_new_ticket_url() );
+            }
+            exit;
+        }
+        if(!$kind_object->exists($_POST['element_id'])){
+            events::add_event(__("Element doesn't exist.",'calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                $this->redirect_to_new_ticket_form();
+            }else{
+                wp_redirect( $this->get_backend_new_ticket_url() );
+            }
+            exit;
+        }
+        if(!$kind_object->can_open($_POST['user_id'], $_POST['element_id'])){
+            events::add_event(__("Cannot open ticket for this user and element.",'calisia-ticket-system'), 'danger');
+            if($redirect_url_callback == 'get_frontend_ticket_url'){
+                $this->redirect_to_new_ticket_form();
+            }else{
+                wp_redirect( $this->get_backend_new_ticket_url() );
+            }
+            exit;
+        }
+
+
 
         if(!isset($_POST['title']) || empty($_POST['title'])){
             events::add_event(__('Ticket title cannot be empty.','calisia-ticket-system'), 'danger');
@@ -137,7 +169,7 @@ class ticket{
             }
             exit;
         }
-            
+
         if(!$this->basic_form_validation($_POST['calisia_nonce'], 'calisia-ticket-new', $_POST['calisia_form_token'], '')){
             if($redirect_url_callback == 'get_frontend_ticket_url'){
                 $this->redirect_to_new_ticket_form();
@@ -149,8 +181,9 @@ class ticket{
     }
 
     public function save_ticket($redirect_url_callback = 'get_frontend_ticket_url'){
-        
+ 
         $this->validate_before_ticket_save($redirect_url_callback);
+
         try{
             $uploaded_files = uploader::save_uploaded_files();
         }catch(\Exception $e) {
@@ -199,7 +232,7 @@ class ticket{
             exit;
         }
 
-        if($this->model->get_deleted == 1){
+        if($this->model->get_deleted() == 1){
             events::add_event(__('You cannot reply to deleted tickets.','calisia-ticket-system'), 'danger');
             if($redirect_url_callback == 'get_frontend_ticket_url'){
                 wp_redirect( $this->get_frontend_ticket_url() );
@@ -341,7 +374,11 @@ class ticket{
     }
 
     public function get_backend_new_ticket_url(){
-        return menu_page_url( 'calisia-tickets', false ).'&new=ticket';
+        $link = menu_page_url( 'calisia-tickets', false ).'&new=ticket';
+        $link .= isset($_GET['user_id']) ? '&user_id=' . $_GET['user_id'] : '';
+        $link .= isset($_GET['kind']) ? '&kind=' . $_GET['kind'] : '';
+        $link .= isset($_GET['element_id']) ? '&element_id=' . $_GET['element_id'] : '';
+        return $link;
     }
     
     public function get_frontend_ticket_url(){

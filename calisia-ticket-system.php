@@ -27,6 +27,7 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/frontend.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ticket-table.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/settings.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ajax.php';
+require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/kinds/kinds.php';
 
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/ticket.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/message.php';
@@ -82,3 +83,5 @@ add_action( 'init', 'calisia_ticket_system\translations::load_textdomain' );
 
 //add metabox to order edit page; display order tickets table
 add_action( 'add_meta_boxes_shop_order', 'calisia_ticket_system\backend::add_order_meta_boxes' );
+
+
