@@ -2,7 +2,7 @@
 namespace calisia_ticket_system;
 
 class install{
-    private static $db_version = '1.16';
+    private static $db_version = '1.21';
     
     public static function update_check(){
         //global $calisia_customer_notes_db_version;
@@ -73,6 +73,19 @@ class install{
         ) $charset_collate;";
         
         dbDelta( $sql );
+
+/*
+        $table_name = $wpdb->prefix . 'calisia_ticket_system_email_schedule';
+        $sql = "CREATE TABLE $table_name (
+            id int(11) NOT NULL AUTO_INCREMENT,
+            message_id int(11) NOT NULL,
+            date_added datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+            date_sent datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+            send_to ENUM('customer', 'support') NOT NULL,
+            PRIMARY KEY  (id)
+        ) $charset_collate;";
+        
+        dbDelta( $sql );*/
 
         add_option( 'calisia_ticket_system', self::$db_version );
     }

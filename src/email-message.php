@@ -73,16 +73,21 @@ class email_message extends email{
 
         ob_start();
         include ABSPATH . $mail_header_template_path;
+        //wc_get_template('emails/email-header.php');
         $message_header = ob_get_contents();
         ob_end_clean();
 
         ob_start();
         include ABSPATH . $mail_footer_template_path;
+        //wc_get_template('emails/email-footer.php');
         $message_footer .= ob_get_contents();
         ob_end_clean();
 
-        $this->message = $message_header . $this->message . $message_footer;
+        require_once ABSPATH . 'wp-content/plugins/woocommerce/includes/emails/class-wc-email.php';
+        $WC_Email = new \WC_Email();
+        $this->message = $WC_Email->format_string($message_header . $this->message . $message_footer);
 
+ 
         return $this->send();
     }
 }

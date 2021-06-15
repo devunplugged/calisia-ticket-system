@@ -10,8 +10,26 @@ class message{
         return $this->model;
     }
 
-    function __construct(){
+    function __construct($message_id = 0){
         $this->model = new models\message();
+        
+        if($message_id === 0)
+            return;
+
+        if(!is_numeric($message_id))
+            return;
+
+        $message_id = (int)$message_id;
+
+        if(!is_int($message_id))
+            return;
+
+        $this->model->set_id($message_id);
+        $this->load_class_values();
+    }
+
+    public function load_class_values(){
+        $this->model->db_fill();  
     }
 
     public function get_attachments(){

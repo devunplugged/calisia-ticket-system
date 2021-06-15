@@ -114,6 +114,14 @@ class data{
         return default_object::get_models($results, 'calisia_ticket_system\ticket');
     }
 
+    public static function get_scheduled_emails(){
+        global $wpdb;
+
+        $results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."calisia_ticket_system_email_schedule WHERE date_sent = '0000-00-00 00:00:00'");
+
+        return default_object::get_models($results, 'calisia_ticket_system\email_schedule');
+    }
+
     
 /*
     public static function get_message_attachments($message_id){

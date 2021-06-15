@@ -68,4 +68,17 @@ class model{
         return end($class_parts);
     }
 
+    public function db_fill(){
+        global $wpdb;
+        $result = $wpdb->get_results(
+            $wpdb->prepare(
+            "SELECT * FROM ".$this->get_table_name()." WHERE id = %d",
+            array(
+                $this->get_id()
+               )
+            )
+        );
+        $this->fill($result[0]);
+        
+    }
 }

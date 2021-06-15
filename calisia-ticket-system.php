@@ -84,4 +84,17 @@ add_action( 'init', 'calisia_ticket_system\translations::load_textdomain' );
 //add metabox to order edit page; display order tickets table
 add_action( 'add_meta_boxes_shop_order', 'calisia_ticket_system\backend::add_order_meta_boxes' );
 
+/*
+add_action( 'wp_footer', 'xzc231' );
+function xzc231(){
+            echo plugin_dir_path( dirname( __FILE__ ) ) . 'woocommerce/includes/emails/class-wc-email.php';
+            require_once plugin_dir_path( dirname( __FILE__ ) ) . 'woocommerce/includes/emails/class-wc-email.php';
+            require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-schedule.php';
+            $email_schedule = new calisia_ticket_system\email_schedule();
+            $WC_Email = new WC_Email();
+            echo $email_schedule->test();
+            echo "//////////////////////////////////////////////////////////////////////////";
+            echo $WC_Email->format_string($email_schedule->test());
 
+    
+}*/

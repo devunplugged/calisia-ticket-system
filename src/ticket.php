@@ -41,22 +41,11 @@ class ticket{
     }
 
     public function load_class_values(){
-        $this->db_get_ticket();  
-    }
-    
-    public function db_get_ticket(){
-        global $wpdb;
-        $result = $wpdb->get_results(
-            $wpdb->prepare(
-            "SELECT * FROM ".$wpdb->prefix."calisia_ticket_system_ticket WHERE id = %d",
-            array(
-                $this->model->get_id()
-               )
-            )
-        );
-        $this->model->fill($result[0]);
+        $this->model->db_fill();  
         $this->conversation = $this->db_get_conversation();
     }
+    
+    
 
     private function db_get_conversation(){
         global $wpdb;
@@ -203,12 +192,16 @@ class ticket{
 
         require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-message.php';
         $email = new email_message();
+        //require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-schedule.php';
+        //$email_schedule = new email_schedule();
         //send email when someone else than user resopnds, otherwise send notification to support
         if($this->model->get_user_id() != get_current_user_id()){
             $email->send_notification_to_client($message);
+            //$email_schedule->schedule($message->get_model()->get_id(), 'customer');
             $this->save_support_last_message_date();
         }else{
             $email->send_notification_to_support($message);
+            //$email_schedule->schedule($message->get_model()->get_id(), 'support');
             $this->save_customer_last_message_date();
         }
 
@@ -274,14 +267,18 @@ class ticket{
 
         require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-message.php';
         $email = new email_message();
+        //require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/email-schedule.php';
+        //$email_schedule = new email_schedule();
         //send email when someone else than user resopnds, otherwise send notification to support
         if($this->get_model()->get_user_id() != get_current_user_id()){ 
             //support responded
             $email->send_notification_to_client($message);
+            //$email_schedule->schedule($message->get_model()->get_id(), 'customer');
             $this->save_support_last_message_date($this);
         }else{
             //client responded
             $email->send_notification_to_support($message);
+            //$email_schedule->schedule($message->get_model()->get_id(), 'support');
             if($this->model->get_status() == 'awaitingreply'){
                 $this->model->set_status('opened');
                 $this->model->update();
@@ -403,4 +400,6 @@ class ticket{
         $order = wc_get_order($this->model->get_element_id());
         return $order->get_view_order_url();
     }
+
+    
 }
