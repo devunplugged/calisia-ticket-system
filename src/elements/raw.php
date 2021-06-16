@@ -53,8 +53,8 @@ class raw{
 
     public static function new_ticket(){
         $template = 'tickets/forms/backend-new-ticket-form';
-        if(isset($_GET['kind']))
-            $template = 'tickets/forms/backend-new-ticket-form-predefind';
+
+            
 
         $arguments = array(
             'status-select' => cts\inputs::select(
@@ -88,8 +88,11 @@ class raw{
         );
 
         if(isset($_GET['user_id'])){
+            $template = 'tickets/forms/backend-new-ticket-form-predefind';
             $user = get_user_by( 'ID', $_GET['user_id'] );
             $arguments['user'] = $user->user_email . ' ' . $user->first_name . ' ' . $user->last_name;
+        }
+        if(isset($_GET['kind'])){
             $arguments['kind'] = $_GET['kind'];
             $arguments['kind_name'] = cts\translations::ticket_kind($_GET['kind']);
         }

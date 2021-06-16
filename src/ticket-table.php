@@ -160,7 +160,7 @@ class Ticket_List extends WP_List_Table {
                 return "<a href='$link_url'>$link_name</a>";
                 break;
 			case 'user_id':
-				return  get_user_by( 'ID', $item[ $column_name ] )->user_email;
+				return  '<a href="' . menu_page_url( 'calisia-tickets', false ) . '&user_id=' . $item[ $column_name ] . '">' .get_user_by( 'ID', $item[ $column_name ] )->user_email . '</a>';
 				break;
 			case 'status':
 			case 'kind':
