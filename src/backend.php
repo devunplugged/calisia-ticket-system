@@ -8,9 +8,10 @@ require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/raw.php';
 
 class backend{
     public static function my_admin_menu() {
+        
         add_menu_page(
             __( 'Calisia Tickets', 'calisia-ticket-system' ),
-            __( 'Tickets', 'calisia-ticket-system' ) . ' ('.data::get_number_of_all_unread_messages().')',
+            __( 'Tickets', 'calisia-ticket-system' ) . ' <span class="ticket-messages-count update-plugins count-'.data::get_number_of_all_unread_messages().'"><span class="plugin-count">'.data::get_number_of_all_unread_messages().'</span></span>',
             'manage_woocommerce',
             'calisia-tickets',
             'calisia_ticket_system\backend::my_admin_page_contents',

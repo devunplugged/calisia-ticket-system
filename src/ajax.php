@@ -39,4 +39,13 @@ class ajax{
         }
         return $results;
     }
+
+    public static function count_unread_messages(){
+        echo json_encode(
+            array(
+                'results'=> data::get_number_of_all_unread_messages()
+            )
+        );
+        wp_die();
+    }
 }

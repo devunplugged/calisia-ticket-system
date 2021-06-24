@@ -45,7 +45,39 @@ jQuery(document).ready(function() {
     let calisia_select_other_element_button = document.querySelector('#select-other-element-button');
     if(calisia_select_other_element_button)
         calisia_select_other_element_button.addEventListener('click', calisiaUI.showElementSearch, false);
+        
+    let calisia_ticket_messages_element = document.querySelector('#calisia-ticket-messages');
+    if(calisia_ticket_messages_element){
+        let unreadCounter = new UnreadCounter();
+        unreadCounter.update();
+    }
 });
+
+class UnreadCounter{
+    update(){
+        console.log("Begin count unread call");
+        let ajax = new CalisiaAjax();
+        ajax.call(
+            { 
+                action: 'calisia_ticket_system_unread_count'
+            },
+            function (data){
+                let count_wrapper_element = document.querySelector(".ticket-messages-count");
+                let class_list = count_wrapper_element.classList;
+                let regex = /^count-\d+$/g;
+
+               class_list.forEach(function (item, index){
+                    if(item.search(regex) != -1){
+                        count_wrapper_element.classList.remove(item);
+                        count_wrapper_element.classList.add("count-"+data.results);
+                        let count_element = count_wrapper_element.querySelector(".plugin-count");
+                        count_element.innerText = data.results;
+                    }
+                });
+            }
+        );
+    }
+}
 
 class CalisiaSearch{
     

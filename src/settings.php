@@ -24,7 +24,7 @@ class settings{
         add_settings_field( 'calisia_ticket_system_email_footer_path', __('Footer', 'calisia-ticket-system'), 'calisia_ticket_system\settings::email_footer_template_input', 'calisia-ticket-system-settings-page', 'email_template_settings' );
         
         add_settings_section( 'support_settings', __( 'Support', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
-        add_settings_field( 'calisia_ticket_system_support_email', __('Suppoer e-mail address', 'calisia-ticket-system'), 'calisia_ticket_system\settings::support_email_input', 'calisia-ticket-system-settings-page', 'support_settings' );
+        add_settings_field( 'calisia_ticket_system_support_email', __('Support e-mail address', 'calisia-ticket-system'), 'calisia_ticket_system\settings::support_email_input', 'calisia-ticket-system-settings-page', 'support_settings' );
     }
 
     public static function section_text() {

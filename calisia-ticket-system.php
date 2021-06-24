@@ -77,6 +77,7 @@ add_action( 'init', 'calisia_ticket_system\install::flush_permalinks', 20);
 
 //ajax
 add_action( "wp_ajax_calisia_ticket_system_search", 'calisia_ticket_system\ajax::search' ); //ajax call endpoint
+add_action( "wp_ajax_calisia_ticket_system_unread_count", 'calisia_ticket_system\ajax::count_unread_messages' ); //ajax call endpoint
 
 //load plugin textdomain
 add_action( 'init', 'calisia_ticket_system\translations::load_textdomain' );

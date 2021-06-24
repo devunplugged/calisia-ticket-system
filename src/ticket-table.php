@@ -162,8 +162,8 @@ class Ticket_List extends WP_List_Table {
 			case 'user_id':
 				return  '<a href="' . menu_page_url( 'calisia-tickets', false ) . '&user_id=' . $item[ $column_name ] . '">' .get_user_by( 'ID', $item[ $column_name ] )->user_email . '</a>';
 				break;
-			case 'status':
-			case 'kind':
+			case 'status': return translations::ticket_status($item[ $column_name ]); break;
+			case 'kind': return translations::ticket_kind($item[ $column_name ]); break;
 			case 'added':
 			case 'last_support_reply':
 			case 'last_customer_reply':
