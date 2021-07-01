@@ -1,7 +1,9 @@
 <?php
 namespace calisia_ticket_system;
 
-
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
 
 class loader{
     public static function load_frontend_css(){

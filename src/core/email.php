@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class email{
     protected $to;
     protected $subject;

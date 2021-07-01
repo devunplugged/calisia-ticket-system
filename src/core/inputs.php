@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class inputs{
 
     public static function input($options, $output = false){

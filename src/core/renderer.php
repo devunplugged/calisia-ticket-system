@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class renderer{
     public static function render($template, $args = array(), $render = true){
         if(!$render)

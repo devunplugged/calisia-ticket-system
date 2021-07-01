@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class settings{
     public static function add_settings_page() {
         add_options_page( 'Example plugin page', __( 'Ticket System', 'calisia-ticket-system' ), 'manage_options', 'calisia-ticket-system', 'calisia_ticket_system\settings::render_plugin_settings_page' );

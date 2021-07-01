@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/intarface/kind.php';
 
 class other implements kind{

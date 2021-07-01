@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/email.php';
 
 class email_message extends email{

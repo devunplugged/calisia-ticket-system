@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system\models;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/core/model.php';
 
 class email_schedule extends model{

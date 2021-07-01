@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class data{
     public static function get_user_orders($phrase, $user_id){
         global $wpdb;

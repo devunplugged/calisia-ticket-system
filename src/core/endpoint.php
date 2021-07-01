@@ -1,6 +1,10 @@
 <?php 
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class endpoint{
     public static function menu_link( $menu_links ){
         $menu_links = array_slice( $menu_links, 0, 5, true ) 

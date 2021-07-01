@@ -6,6 +6,10 @@
  * Domain Path: /languages
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 define('CALISIA_TICKET_SYSTEM_ROOT', __DIR__);
 define('CALISIA_TICKET_SYSTEM_URL', plugin_dir_url( __FILE__ ));
 

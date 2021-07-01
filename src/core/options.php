@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class options{
     public static function option_on($option_name){
         $options = get_option( 'calisia_ticket_system_plugin_options' );

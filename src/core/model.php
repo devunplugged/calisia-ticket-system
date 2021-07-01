@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system\models;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class model{
     public function fill($object){
         foreach(get_object_vars($object) as $key => $value){

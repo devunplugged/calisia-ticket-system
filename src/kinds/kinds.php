@@ -1,6 +1,9 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
 
 class kinds{
     public static function get($kind){

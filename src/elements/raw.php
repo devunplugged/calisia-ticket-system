@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system\elements;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 use \calisia_ticket_system as cts;
 
 class raw{

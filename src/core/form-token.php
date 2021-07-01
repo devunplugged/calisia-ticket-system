@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 class Form_Token{
     public static function create_token($token_name = ''){
         //$_SESSION['calisia-form-token'] = self::generateRandomString();

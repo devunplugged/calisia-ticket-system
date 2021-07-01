@@ -1,6 +1,10 @@
 <?php
 namespace calisia_ticket_system;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit();
+}
+
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/controls.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/panels.php';
 require_once CALISIA_TICKET_SYSTEM_ROOT . '/src/elements/raw.php';
