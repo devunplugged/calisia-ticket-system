@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: calisia-ticket-system\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-22 06:18+0000\n"
-"PO-Revision-Date: 2021-06-24 08:40+0000\n"
+"PO-Revision-Date: 2021-07-05 09:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Polski\n"
 "Language: pl_PL\n"
@@ -16,15 +16,15 @@ msgstr ""
 "X-Loco-Version: 2.5.3; wp-5.7.2\n"
 "X-Domain: calisia-ticket-system"
 
-#: src/ticket-table.php:223
+#: src/ticket-table.php:227
 msgid "Added"
 msgstr "Dodano"
 
-#: src/elements/controls.php:18 src/elements/controls.php:31
+#: src/elements/controls.php:22 src/elements/controls.php:35
 msgid "All"
 msgstr "Wszystkie"
 
-#: src/email-message.php:32 src/email-message.php:58
+#: src/email-message.php:36 src/email-message.php:62
 msgid "All the best from Spiżarnia Rumianek team"
 msgstr "Wszystkiego dobrego od zespołu Spiżarni Rumianek"
 
@@ -32,8 +32,8 @@ msgstr "Wszystkiego dobrego od zespołu Spiżarni Rumianek"
 msgid "Attachments:"
 msgstr "Załączniki:"
 
-#: src/elements/controls.php:34 src/elements/panels.php:93
-#: src/elements/raw.php:68 src/core/translations.php:26
+#: src/elements/controls.php:38 src/elements/panels.php:97
+#: src/elements/raw.php:72 src/core/translations.php:30
 msgid "Awaiting Reply"
 msgstr "Oczekuje na Odpowiedź"
 
@@ -41,11 +41,11 @@ msgstr "Oczekuje na Odpowiedź"
 msgid "Billing Address:"
 msgstr "Adres Rozliczeniowy:"
 
-#: src/backend.php:12
+#: src/backend.php:17
 msgid "Calisia Tickets"
 msgstr "Calisia Tickets"
 
-#: src/settings.php:17 src/settings.php:20
+#: src/settings.php:21 src/settings.php:24
 msgid "calisia-cutomer-notes"
 msgstr "calisia-cutomer-notes"
 
@@ -53,7 +53,7 @@ msgstr "calisia-cutomer-notes"
 msgid "calisia-ticket-system"
 msgstr "calisia-ticket-system"
 
-#: src/ticket.php:131
+#: src/ticket.php:135
 msgid "Cannot open ticket for this user and element."
 msgstr "Nie można utworzyć zgłoszenia dla tego użytkownika i elementu."
 
@@ -66,8 +66,8 @@ msgstr "Adres IP klienta: %1$s"
 msgid "Close Ticket"
 msgstr "Zamknij Zgłoszenie"
 
-#: src/elements/controls.php:35 src/elements/panels.php:94
-#: src/elements/raw.php:69 src/core/translations.php:27
+#: src/elements/controls.php:39 src/elements/panels.php:98
+#: src/elements/raw.php:73 src/core/translations.php:31
 msgid "Completed"
 msgstr "Zakończony"
 
@@ -89,7 +89,7 @@ msgstr "Cecha klienta:"
 msgid "Date Created: %1$s"
 msgstr "Data utworzenia: %1$s"
 
-#: src/ticket-table.php:220
+#: src/ticket-table.php:224
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -97,7 +97,7 @@ msgstr "E-mail"
 msgid "E-mail:"
 msgstr "E-mail:"
 
-#: src/ticket.php:122
+#: src/ticket.php:126
 msgid "Element doesn't exist."
 msgstr "Element nie istnieje."
 
@@ -109,19 +109,19 @@ msgstr "ID Elementu"
 msgid "Element ID:"
 msgstr "ID Elementu:"
 
-#: src/settings.php:22
+#: src/settings.php:26
 msgid "Email template"
 msgstr "Szablon E-mail"
 
-#: src/core/pagination.php:80
+#: src/core/pagination.php:84
 msgid "First"
 msgstr "Pierwszy"
 
-#: src/settings.php:24
+#: src/settings.php:28
 msgid "Footer"
 msgstr "Stopka"
 
-#: src/settings.php:23
+#: src/settings.php:27
 msgid "Header"
 msgstr "Nagłówek"
 
@@ -131,11 +131,15 @@ msgstr ""
 "Tutaj możesz wybrać czy chcesz integrować działanie tej wtyczki z innymi "
 "wtyczkami"
 
-#: src/settings.php:19
+#: src/settings.php:149 src/settings.php:164 src/settings.php:179
+msgid "Insert slug of my account page endpoint."
+msgstr "Wpisz slug  punktu końcowego mojego konta"
+
+#: src/settings.php:23
 msgid "Integration Settings"
 msgstr "Ustawienia integracji"
 
-#: src/ticket-table.php:222
+#: src/ticket-table.php:226
 msgid "Kind"
 msgstr "Rodzaj"
 
@@ -143,7 +147,7 @@ msgstr "Rodzaj"
 msgid "Kind:"
 msgstr "Rodzaj:"
 
-#: src/core/pagination.php:83
+#: src/core/pagination.php:87
 msgid "Last"
 msgstr "Ostatni"
 
@@ -152,15 +156,15 @@ msgstr "Ostatni"
 msgid "Last activity:"
 msgstr "Ostatnia Aktywność:"
 
-#: src/ticket-table.php:225
+#: src/ticket-table.php:229
 msgid "Last Customer Reply"
 msgstr "Ostatnia Odpowiedź Klienta"
 
-#: src/ticket-table.php:224
+#: src/ticket-table.php:228
 msgid "Last Support Reply"
 msgstr "Ostatnia Odpowiedź Obsługi"
 
-#: src/settings.php:16
+#: src/settings.php:20
 msgid "Main Settings"
 msgstr "Ustawienia Główne"
 
@@ -168,42 +172,59 @@ msgstr "Ustawienia Główne"
 msgid "Message"
 msgstr "Wiadomość"
 
-#: src/ticket.php:153 src/ticket.php:239
+#: src/ticket.php:157 src/ticket.php:243
 msgid "Message cannot be empty."
 msgstr "Wiadomość nie może być pusta."
 
-#: src/email-message.php:22 src/email-message.php:46
+#: src/settings.php:33
+msgid "My Account Endpoint"
+msgstr "Punkt Końcowy Strony Mojego Konta"
+
+#: src/settings.php:36
+msgid "My Account Page New Ticket Endpoint"
+msgstr "Punkt końcowy nowego zgłoszenia (moje konto)"
+
+#: src/settings.php:35
+msgid "My Account Page Single Ticket Endpoint"
+msgstr "Punkt końcowy pojedynczego zgłoszenia (moje konto)"
+
+#: src/settings.php:34
+msgid "My Account Page Tickets Endpoint"
+msgstr "Punkt końcowy zgłoszeń (moje konto)"
+
+#: src/email-message.php:26 src/email-message.php:50
 #, php-format
 msgid "New reply to ticket: (#%1$s) %2$s"
 msgstr "Nowa odpowiedź na zgłoszenie (#%1$s) %2$s"
 
-#: src/backend.php:96 templates/tickets/buttons/new-order-ticket-button.php:2
+#: src/backend.php:101 templates/tickets/buttons/new-order-ticket-button.php:2
+#: templates/tickets/buttons/new-ticket-button.php:2
 #: templates/tickets/buttons/new-default-ticket-button.php:2
 #: templates/tickets/buttons/backend-new-ticket-button.php:12
 msgid "New Ticket"
 msgstr "Nowe Zgłoszenie"
 
-#: src/ticket-table.php:140
+#: src/ticket-table.php:144
 msgid "No tickets avaliable."
 msgstr "Brak zgłoszeń"
 
-#: src/settings.php:43 src/settings.php:60
+#: src/settings.php:52 src/settings.php:69
 msgid "Off"
 msgstr "Wyłączone"
 
-#: src/settings.php:42 src/settings.php:59
+#: src/settings.php:51 src/settings.php:68
 msgid "On"
 msgstr "Włączone"
 
-#: src/core/translations.php:25
+#: src/core/translations.php:29
 msgid "On hold"
 msgstr "Wstrzymany"
 
-#: src/elements/raw.php:67
+#: src/elements/raw.php:71
 msgid "On-hold"
 msgstr "Wstrzymany"
 
-#: src/elements/controls.php:33 src/elements/panels.php:92
+#: src/elements/controls.php:37 src/elements/panels.php:96
 msgid "Onhold"
 msgstr "Wstrzymany"
 
@@ -211,13 +232,13 @@ msgstr "Wstrzymany"
 msgid "Open This Ticket"
 msgstr "Otwórz to zgłoszenie"
 
-#: src/elements/controls.php:32 src/elements/panels.php:91
-#: src/elements/raw.php:66 src/core/translations.php:24
+#: src/elements/controls.php:36 src/elements/panels.php:95
+#: src/elements/raw.php:70 src/core/translations.php:28
 msgid "Opened"
 msgstr "Otwarte"
 
-#: src/elements/controls.php:19 src/elements/raw.php:81
-#: src/core/translations.php:15
+#: src/elements/controls.php:23 src/elements/raw.php:85
+#: src/core/translations.php:19
 msgid "Order"
 msgstr "Zamówienie"
 
@@ -231,7 +252,7 @@ msgstr "Zamówienie #%1$s"
 msgid "Order Status: %1$s"
 msgstr "Status Zamówienia: %1$s"
 
-#: src/backend.php:120 src/backend.php:151
+#: src/backend.php:125 src/backend.php:156
 msgid "Order tickets"
 msgstr "Zgłoszenia do zamówień"
 
@@ -240,8 +261,8 @@ msgstr "Zgłoszenia do zamówień"
 msgid "Order: #%1$s"
 msgstr "Zamówienie: #%1$s"
 
-#: src/elements/controls.php:20 src/elements/raw.php:80
-#: src/core/translations.php:16 templates/tickets/forms/new-ticket-form.php:15
+#: src/elements/controls.php:24 src/elements/raw.php:84
+#: src/core/translations.php:20 templates/tickets/forms/new-ticket-form.php:15
 msgid "Other"
 msgstr "Inne"
 
@@ -250,7 +271,7 @@ msgstr "Inne"
 msgid "Paid: %1$s"
 msgstr "Zapłacone: %1$s"
 
-#: src/settings.php:108
+#: src/settings.php:117
 msgid ""
 "Path to email footer template. If left blank \"/wp-"
 "content/plugins/woocommerce/templates/emails/email-footer.php\" is used."
@@ -258,7 +279,7 @@ msgstr ""
 "Ścieżka do szablony stopki E-mail. Jeśli puste użyte będzie \"/wp-"
 "content/plugins/woocommerce/templates/emails/email-footer.php\""
 
-#: src/settings.php:92
+#: src/settings.php:101
 msgid ""
 "Path to email header template. If left blank \"/wp-"
 "content/plugins/woocommerce/templates/emails/email-header.php\" is used."
@@ -275,11 +296,11 @@ msgstr "Płatnośc przez: %1$s (%2$s)"
 msgid "Registered:"
 msgstr "Zarejestrowany"
 
-#: src/email-message.php:26 src/email-message.php:50
+#: src/email-message.php:30 src/email-message.php:54
 msgid "Reply content:"
 msgstr "Treść odpowiedzi:"
 
-#: src/settings.php:76
+#: src/settings.php:85
 msgid ""
 "Role slugs capable of replaying to tickets. If left blank roles "
 "\"administrator\", \"shop_manager\" are used."
@@ -315,19 +336,21 @@ msgstr "Wyślij"
 msgid "Shipping Address:"
 msgstr "Adres wysyłkowy:"
 
-#: src/ticket-table.php:221
+#: src/ticket-table.php:225
 msgid "Status"
 msgstr "Status"
 
-#: src/settings.php:27
-msgid "Suppoer e-mail address"
-msgstr "Adres E-mail wsparcia"
-
-#: src/settings.php:26
+#: src/settings.php:30
 msgid "Support"
 msgstr "Wsparcie"
 
-#: src/settings.php:124
+#: src/settings.php:31
+#, fuzzy
+#| msgid "Suppoer e-mail address"
+msgid "Support e-mail address"
+msgstr "Adres E-mail wsparcia"
+
+#: src/settings.php:133
 msgid ""
 "Support email address. Used to send notifications about new tickets and "
 "replys."
@@ -335,15 +358,15 @@ msgstr ""
 "Adres E-mail wsparcia, używany do wysyłania powiadomień o zgłoszeniach i "
 "odpowiedziach."
 
-#: src/ticket.php:343
+#: src/ticket.php:347
 msgid "This form has been saved already"
 msgstr "Ten formularz został już zapisany"
 
-#: src/frontend.php:74
+#: src/frontend.php:78
 msgid "This ticket has been deleted"
 msgstr "To zgłoszenie zostało usunięte"
 
-#: src/ticket-table.php:12
+#: src/ticket-table.php:16
 msgid "ticket"
 msgstr "zgłoszenie"
 
@@ -353,11 +376,11 @@ msgstr "zgłoszenie"
 msgid "Ticket #%1$s"
 msgstr "Zgłoszenie #%1$s"
 
-#: src/email-message.php:48
+#: src/email-message.php:52
 msgid "Ticket has a new response"
 msgstr "Zgłoszenie ma nową odpowiedź"
 
-#: src/ticket.php:113
+#: src/ticket.php:117
 msgid "Ticket kind doesn't exist."
 msgstr "Ten rodzaj zgłoszenia nie istnieje."
 
@@ -366,7 +389,7 @@ msgstr "Ten rodzaj zgłoszenia nie istnieje."
 msgid "Ticket status:"
 msgstr "Status zgłoszenia:"
 
-#: src/settings.php:6
+#: src/settings.php:10
 msgid "Ticket System"
 msgstr "System Zgłoszeń"
 
@@ -378,7 +401,7 @@ msgstr "Ustawienia Systemu Zgłoszeń"
 msgid "Ticket title"
 msgstr "Tytuł zgłoszenia"
 
-#: src/ticket.php:143
+#: src/ticket.php:147
 msgid "Ticket title cannot be empty."
 msgstr "Tytuł zgłoszenia nie może być pusty."
 
@@ -396,15 +419,15 @@ msgstr "Typ zgłoszenia"
 msgid "Ticket type:"
 msgstr "Typ Zgłoszenia:"
 
-#: src/backend.php:13 src/backend.php:111 src/core/endpoint.php:7
+#: src/backend.php:18 src/backend.php:116 src/core/endpoint.php:27
 msgid "Tickets"
 msgstr "Zgłoszenia"
 
-#: src/ticket-table.php:13
+#: src/ticket-table.php:17
 msgid "tickets"
 msgstr "Zgłoszenia"
 
-#: src/ticket-table.php:219
+#: src/ticket-table.php:223
 msgid "Title"
 msgstr "Tytuł"
 
@@ -412,14 +435,18 @@ msgstr "Tytuł"
 msgid "Tomasz Boroń"
 msgstr "Tomasz Boroń"
 
-#: src/ticket.php:347
+#: src/ticket.php:351
 msgid "Unexpected error"
 msgstr "Nieoczekiwany błąd"
 
-#: src/email-message.php:52
+#: src/email-message.php:56
 #, php-format
 msgid "User %1$s says:"
 msgstr "Użytkownik %1$s pisze:"
+
+#: templates/elements/backend-user.php:3
+msgid "User panel"
+msgstr "Panel Użytkownika"
 
 #: templates/tickets/forms/backend-new-ticket-form-predefind.php:8
 msgid "User:"
@@ -429,16 +456,16 @@ msgstr "Użytkownik:"
 msgid "Username:"
 msgstr "Nazwa użytkownika:"
 
-#: src/email-message.php:30 src/email-message.php:56
+#: src/email-message.php:34 src/email-message.php:60
 #, php-format
 msgid "Visit %1$s to read the whole conversation"
 msgstr "Odwiedź %1$s, aby przeczytać całą konwersację"
 
-#: src/frontend.php:64
+#: src/frontend.php:68
 msgid "You are not allowed to view this content"
 msgstr "Nie masz uprawnień do przeglądania tej treści"
 
-#: src/ticket.php:229
+#: src/ticket.php:233
 msgid "You cannot reply to deleted tickets."
 msgstr "Nie możesz odpowiedzieć na zamknięte zgłoszenie."
 
@@ -446,11 +473,11 @@ msgstr "Nie możesz odpowiedzieć na zamknięte zgłoszenie."
 msgid "You do not have tickets yet."
 msgstr "Nie masz jeszcze zgłoszeń."
 
-#: src/ticket.php:364
+#: src/ticket.php:368
 msgid "You have no access to this action"
 msgstr "Nie masz dostępu do tej akcji"
 
-#: src/ticket.php:93 src/ticket.php:214
+#: src/ticket.php:97 src/ticket.php:218
 msgid "You have to be logged in"
 msgstr "Musisz być zalogowany/a"
 
@@ -458,10 +485,11 @@ msgstr "Musisz być zalogowany/a"
 msgid "Your reply:"
 msgstr "Twoja odpowiedź:"
 
-#: src/email-message.php:24
+#: src/email-message.php:28
 msgid "Your ticket has a new response"
-msgstr "Twoje zgłoszenia ma nową odpowiedź"
+msgstr "Twoje zgłoszenie ma nową odpowiedź"
 
-#: src/frontend.php:168 src/frontend.php:189
+#: src/frontend.php:172 src/frontend.php:193
+#: templates/tickets/lists/ticket-list-title-bar.php:2
 msgid "Your tickets"
 msgstr "Twoje zgłoszenia"

@@ -48,8 +48,8 @@ add_action( 'plugins_loaded', 'calisia_ticket_system\install::update_check' );
 
 //add my account endpoints and its content
 add_action( 'init', 'calisia_ticket_system\frontend::my_account_endpoints' );
-add_action( 'woocommerce_account_calisia-new-ticket_endpoint', 'calisia_ticket_system\frontend::new_ticket' );
-add_action( 'woocommerce_account_calisia-show-ticket_endpoint', 'calisia_ticket_system\frontend::ticket' );
+add_action( 'woocommerce_account_'.calisia_ticket_system\endpoint::get_new_ticket_endpoint_name().'_endpoint', 'calisia_ticket_system\frontend::new_ticket' );
+add_action( 'woocommerce_account_'.calisia_ticket_system\endpoint::get_ticket_endpoint_name().'_endpoint', 'calisia_ticket_system\frontend::ticket' );
 
 //show order tickets
 add_action( 'woocommerce_order_details_after_customer_details', 'calisia_ticket_system\frontend::order_tickets', 20, 1);
@@ -76,7 +76,7 @@ add_action( 'admin_init', 'calisia_ticket_system\settings::register_settings' );
 //my-account endpoint
 add_filter ( 'woocommerce_account_menu_items', 'calisia_ticket_system\endpoint::menu_link', 40 );
 add_action( 'init', 'calisia_ticket_system\endpoint::add_endpoint' );
-add_action( 'woocommerce_account_calisia-tickets_endpoint', 'calisia_ticket_system\endpoint::endpoint_content' );
+add_action( 'woocommerce_account_'.calisia_ticket_system\endpoint::get_tickets_endpoint_name().'_endpoint', 'calisia_ticket_system\endpoint::endpoint_content' );
 add_action( 'init', 'calisia_ticket_system\install::flush_permalinks', 20);
 
 //ajax
@@ -89,6 +89,8 @@ add_action( 'init', 'calisia_ticket_system\translations::load_textdomain' );
 //add metabox to order edit page; display order tickets table
 add_action( 'add_meta_boxes_shop_order', 'calisia_ticket_system\backend::add_order_meta_boxes' );
 
+//detect change in my account endpoint setting na schedule permalinks flush
+add_filter( 'pre_update_option_calisia_ticket_system_plugin_options', 'calisia_ticket_system\options::detect_change_in_my_acc_endpoint', 10, 2 );
 /*
 add_action( 'wp_footer', 'xzc231' );
 function xzc231(){

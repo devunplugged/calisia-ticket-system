@@ -29,6 +29,11 @@ class settings{
         
         add_settings_section( 'support_settings', __( 'Support', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
         add_settings_field( 'calisia_ticket_system_support_email', __('Support e-mail address', 'calisia-ticket-system'), 'calisia_ticket_system\settings::support_email_input', 'calisia-ticket-system-settings-page', 'support_settings' );
+        
+        add_settings_section( 'my_acc_endpoint_settings', __( 'My Account Endpoint', 'calisia-ticket-system' ), 'calisia_ticket_system\settings::section_text', 'calisia-ticket-system-settings-page' );
+        add_settings_field( 'calisia_ticket_system_my_acc_endpoint', __('My Account Page Tickets Endpoint', 'calisia-ticket-system'), 'calisia_ticket_system\settings::my_acc_endpoint_input', 'calisia-ticket-system-settings-page', 'my_acc_endpoint_settings' );
+        add_settings_field( 'calisia_ticket_system_ticket_endpoint', __('My Account Page Single Ticket Endpoint', 'calisia-ticket-system'), 'calisia_ticket_system\settings::ticket_endpoint_input', 'calisia-ticket-system-settings-page', 'my_acc_endpoint_settings' );
+        add_settings_field( 'calisia_ticket_system_new_ticket_endpoint', __('My Account Page New Ticket Endpoint', 'calisia-ticket-system'), 'calisia_ticket_system\settings::new_ticket_endpoint_input', 'calisia-ticket-system-settings-page', 'my_acc_endpoint_settings' );
     }
 
     public static function section_text() {
@@ -126,6 +131,52 @@ class settings{
                 'value' => options::get_option_value('support_email'),
                 'type' => 'text',
                 'label' => __('Support email address. Used to send notifications about new tickets and replys.', 'calisia-ticket-system')
+            ),
+            true
+        );
+
+        //print_r(options::get_replay_capable_roles());
+    }
+
+    public static function my_acc_endpoint_input(){
+        inputs::input(
+            array(
+                'id' => 'calisia_ticket_system_my_acc_endpoint',
+                'name' => 'calisia_ticket_system_plugin_options[my_acc_endpoint]',
+                'class' => 'select',
+                'value' => options::get_option_value('my_acc_endpoint'),
+                'type' => 'text',
+                'label' => __('Insert slug of my account page endpoint.', 'calisia-ticket-system')
+            ),
+            true
+        );
+
+        //print_r(options::get_replay_capable_roles());
+    }
+    public static function new_ticket_endpoint_input(){
+        inputs::input(
+            array(
+                'id' => 'calisia_ticket_system_new_ticket_endpoint',
+                'name' => 'calisia_ticket_system_plugin_options[new_ticket_endpoint]',
+                'class' => 'select',
+                'value' => options::get_option_value('new_ticket_endpoint'),
+                'type' => 'text',
+                'label' => __('Insert slug of my account page endpoint.', 'calisia-ticket-system')
+            ),
+            true
+        );
+
+        //print_r(options::get_replay_capable_roles());
+    }
+    public static function ticket_endpoint_input(){
+        inputs::input(
+            array(
+                'id' => 'calisia_ticket_system_ticket_endpoint',
+                'name' => 'calisia_ticket_system_plugin_options[ticket_endpoint]',
+                'class' => 'select',
+                'value' => options::get_option_value('ticket_endpoint'),
+                'type' => 'text',
+                'label' => __('Insert slug of my account page endpoint.', 'calisia-ticket-system')
             ),
             true
         );

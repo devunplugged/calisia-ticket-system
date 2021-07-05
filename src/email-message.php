@@ -28,9 +28,9 @@ class email_message extends email{
         $this->message = __('Your ticket has a new response', 'calisia-ticket-system');
         $this->message .= '<br>';
         $this->message .= __('Reply content:', 'calisia-ticket-system');
-        $this->message .= '<br>';
+        $this->message .= '<br><b>';
         $this->message .= $message->get_model()->get_text();
-        $this->message .= '<br>';
+        $this->message .= '</b><br>';
         $this->message .= sprintf(__('Visit %1$s to read the whole conversation', 'calisia-ticket-system'), $ticket->get_frontend_ticket_url());
         $this->message .= '<br>';
         $this->message .= __('All the best from Spiżarnia Rumianek team', 'calisia-ticket-system');
@@ -54,9 +54,9 @@ class email_message extends email{
         $this->message .= __('Reply content:', 'calisia-ticket-system');
         $this->message .= '<br>';
         $this->message .= sprintf(__('User %1$s says:', 'calisia-ticket-system'), $user->user_firstname . " " . $user->user_lastname . " (" . $user->user_email . ")");
-        $this->message .= '<br>';
+        $this->message .= '<br><b>';
         $this->message .= $message->get_model()->get_text();
-        $this->message .= '<br>';
+        $this->message .= '</b><br>';
         $this->message .= sprintf(__('Visit %1$s to read the whole conversation', 'calisia-ticket-system'), $ticket->get_backend_ticket_url());
         $this->message .= '<br>';
         $this->message .= __('All the best from Spiżarnia Rumianek team', 'calisia-ticket-system');
@@ -90,7 +90,7 @@ class email_message extends email{
         require_once ABSPATH . 'wp-content/plugins/woocommerce/includes/emails/class-wc-email.php';
         $WC_Email = new \WC_Email();
         $this->message = $WC_Email->format_string($message_header . $this->message . $message_footer);
-
+        
  
         return $this->send();
     }

@@ -35,4 +35,29 @@ class options{
 
         return $reply_roles_clean;
     }
+
+    public static function detect_change_in_my_acc_endpoint($new_value, $old_value){
+        if(!isset($new_value['my_acc_endpoint']) && !isset($new_value['ticket_endpoint']) && !isset($new_value['new_ticket_endpoint']))
+            return $new_value;
+
+        if(!isset($old_value['my_acc_endpoint'])){
+            delete_option('calisia_ticket_system_permalinks_flushed');
+        }elseif($new_value['my_acc_endpoint'] != $old_value['my_acc_endpoint']){
+            delete_option('calisia_ticket_system_permalinks_flushed');
+        }
+
+        if(!isset($old_value['ticket_endpoint'])){
+            delete_option('calisia_ticket_system_permalinks_flushed');
+        }elseif($new_value['ticket_endpoint'] != $old_value['ticket_endpoint']){
+            delete_option('calisia_ticket_system_permalinks_flushed');
+        }
+
+        if(!isset($old_value['new_ticket_endpoint'])){
+            delete_option('calisia_ticket_system_permalinks_flushed');
+        }elseif($new_value['new_ticket_endpoint'] != $old_value['new_ticket_endpoint']){
+            delete_option('calisia_ticket_system_permalinks_flushed');
+        }
+
+        return $new_value;
+    }
 }

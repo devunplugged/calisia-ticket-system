@@ -383,13 +383,13 @@ class ticket{
     }
     
     public function get_frontend_ticket_url(){
-        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-show-ticket/?id=' . $this->model->get_id();
+        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . endpoint::get_ticket_endpoint_name() . '/?id=' . $this->model->get_id();
     }
 
     public function get_frontend_new_ticket_url($kind = '', $element_id = ''){
         if($attr)
-            return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-new-ticket/?kind='.$kind.'&element_id'. $element_id;
-        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . 'calisia-new-ticket/';
+            return get_permalink( get_option('woocommerce_myaccount_page_id') ) . endpoint::get_new_ticket_endpoint_name() .'/?kind='.$kind.'&element_id'. $element_id;
+        return get_permalink( get_option('woocommerce_myaccount_page_id') ) . endpoint::get_new_ticket_endpoint_name() .'/';
     }
 
     public function redirect_to_new_ticket_form(){

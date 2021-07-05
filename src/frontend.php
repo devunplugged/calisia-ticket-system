@@ -8,8 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class frontend{
 
     public static function my_account_endpoints() {
-        add_rewrite_endpoint( 'calisia-new-ticket', EP_PAGES );
-        add_rewrite_endpoint( 'calisia-show-ticket', EP_PAGES );
+        add_rewrite_endpoint( endpoint::get_new_ticket_endpoint_name(), EP_PAGES );
+        add_rewrite_endpoint( endpoint::get_ticket_endpoint_name(), EP_PAGES );
     }
 
     
